@@ -7,7 +7,7 @@ forall X -> (tuple) to_tuple (X x) asm "NOP";
 }
 
 (int, int, int, tuple) solve(int n, int m, tuple maze) method_id {
-    tuple default_value = triple(1000, 1000, 1000);
+    tuple default_value = to_tuple([1000, 1000, 1000]);
 
     tuple d = empty_tuple();
     {
@@ -19,6 +19,8 @@ forall X -> (tuple) to_tuple (X x) asm "NOP";
             d~tpush(d);
         }
     }
+
+
 
     return (-1, -1, -1, null());
 }
