@@ -1,5 +1,24 @@
 #include "imports/stdlib.fc";
 
+forall X -> (tuple) to_tuple (X x) asm "NOP";
+
 () recv_internal(int my_balance, int msg_value, cell in_msg_full, slice in_msg_body) impure {
 
+}
+
+(int, int, int, tuple) solve(int n, int m, tuple maze) method_id {
+    tuple default_value = triple(1000, 1000, 1000);
+
+    tuple d = empty_tuple();
+    {
+        repeat (n) {
+            tuple cur = empty_tuple();
+            repeat (m) {
+                cur~tpush(default_value);
+            }
+            d~tpush(d);
+        }
+    }
+
+    return (-1, -1, -1, null());
 }
