@@ -10,6 +10,11 @@ forall X -> (tuple) to_tuple (X x) asm "NOP";
 ;;    #X, #?, # of moves, used, which cell is parent
     tuple default_value = to_tuple([1000, 1000, 1000, 0, -1, -1]);
 
+    int start_x;
+    int start_y;
+    int end_x;
+    int end_y;
+
     tuple d = empty_tuple();
     repeat (n) {
         tuple cur = empty_tuple();
@@ -20,7 +25,29 @@ forall X -> (tuple) to_tuple (X x) asm "NOP";
         d~tpush(d);
     }
 
+    {
+        int i = 0;
+        repeat (n) {
+            tuple row = maze.at(i);
 
+            int j = 0;
+            repeat(m) {
+                int val = row.at(j);
+
+                if (val == "S") {
+                    start_x = i;
+                    start_y = j;
+                } elseif (val == "E") {
+                    end_x = i;
+                    end_y = j;
+                }
+
+                j += 1;
+            }
+
+            i += 1;
+        }
+    }
 
     repeat(1000) {
         return (-1, -1, -1, null());
