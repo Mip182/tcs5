@@ -125,7 +125,7 @@ forall X -> (tuple) to_tuple (X x) asm "NOP";
                 repeat(m) {
                     tuple val = row.at(j);
 
-                    if (val.at(3) == false & is_less(cur_min,val)) {
+                    if ((val.at(3) == false) & is_less(cur_min,val)) {
                         cur_min = val;
                         pos_x = i;
                         pos_y = j;
@@ -138,7 +138,7 @@ forall X -> (tuple) to_tuple (X x) asm "NOP";
             }
         }
 
-        if (pos_x == end_x & pos_y == end_y) {
+        if ((pos_x == end_x) & (pos_y == end_y)) {
             int new_pos_x = d.at(pos_x).at(pos_y).at(4);
             int new_pos_y = d.at(pos_x).at(pos_y).at(5);
 
@@ -163,7 +163,7 @@ forall X -> (tuple) to_tuple (X x) asm "NOP";
         int diff_x = -1;
         repeat(3) {
             int x = pos_x + diff_x;
-            if (x >= 0 & x < n) {
+            if ((x >= 0) & (x < n)) {
                 tuple row = d.at(x);
                 tuple row_maze = maze.at(x);
                 int diff_y = -1;
@@ -171,7 +171,7 @@ forall X -> (tuple) to_tuple (X x) asm "NOP";
                 repeat (3) {
                     int y = pos_y + diff_y;
 
-                    if (y >= 0 & y < m) {
+                    if ((y >= 0) & (y < m)) {
                         tuple val = row.at(y);
 
                         if (val.at(3) == false) {
