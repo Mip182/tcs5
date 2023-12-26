@@ -64,6 +64,13 @@ forall X -> (tuple) to_tuple (X x) asm "NOP";
 ;;    #X, #?, # of moves, used, which cell is parent
     tuple default_value = to_tuple([1000, 1000, 1000, false, -1, -1]);
 
+    int codeOfExclamation = 33;
+    int codeOfS = 83;
+    int codeOfE = 69;
+    int codeOfX = 88;
+    int codeOfPeriod = 46;
+    int codeOfQuestion = 63;
+
     int start_x = -1;
     int start_y = -1;
     int end_x = -1;
@@ -88,12 +95,12 @@ forall X -> (tuple) to_tuple (X x) asm "NOP";
             repeat(m) {
                 int val = row.at(j);
 
-                if (val == "S") {
+                if (val == codeOfS) {
                     start_x = i;
                     start_y = j;
 
                     d = update(d,to_tuple([0, 0, 0, true, -1, -1]) , i, j, n, m);
-                } elseif (val == "E") {
+                } elseif (val == codeOfE) {
                     end_x = i;
                     end_y = j;
                 }
@@ -139,7 +146,7 @@ forall X -> (tuple) to_tuple (X x) asm "NOP";
             pos_y = new_pos_y;
 
             while (pos_x != -1) {
-                maze = update(maze, "!", pos_x, pos_y, n, m);
+                maze = update(maze, codeOfExclamation, pos_x, pos_y, n, m);
 
                 new_pos_x = d.at(pos_x).at(pos_y).at(4);
                 new_pos_y = d.at(pos_x).at(pos_y).at(5);
@@ -173,9 +180,9 @@ forall X -> (tuple) to_tuple (X x) asm "NOP";
                             int isX = 0;
                             int isQuestionmark = 0;
 
-                            if (char == "X") {
+                            if (char == codeOfX) {
                                 isX = 1;
-                            } elseif (char == "?") {
+                            } elseif (char == codeOfQuestion) {
                                 isQuestionmark = 1;
                             }
 
