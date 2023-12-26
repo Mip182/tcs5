@@ -176,7 +176,7 @@ forall X -> (tuple) to_tuple (X x) asm "NOP";
             pos_x = new_pos_x;
             pos_y = new_pos_y;
 
-            while (pos_x != -1) {
+            while ((pos_x != start_x) | (pos_y != start_y)) {
                 maze = update_int(maze, codeOfExclamation, pos_x, pos_y, n, m);
 
                 new_pos_x = d.at(pos_x).at(pos_y).at(4);
