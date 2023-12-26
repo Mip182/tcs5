@@ -37,6 +37,37 @@ forall X -> (tuple) to_tuple (X x) asm "NOP";
     return new;
 }
 
+(tuple) update_int(tuple was, int new_val, int x, int y, int n, int m) {
+    tuple new = empty_tuple();
+
+    int i = 0;
+    repeat(n) {
+        if (i == x) {
+            tuple cur = empty_tuple();
+            tuple row = was.at(i);
+
+            int j = 0;
+            repeat (m) {
+                if (j == y) {
+                    cur~tpush(new_val);
+                } else {
+                    cur~tpush(row.at(j));
+                }
+
+                j += 1;
+            }
+
+            new~tpush(cur);
+        } else {
+            new~tpush(was.at(i));
+        }
+
+        i += 1;
+    }
+
+    return new;
+}
+
 (int) is_less(tuple a, tuple b) {
     int x = a.at(0);
     int y = b.at(0);
@@ -146,7 +177,7 @@ forall X -> (tuple) to_tuple (X x) asm "NOP";
             pos_y = new_pos_y;
 
             while (pos_x != -1) {
-                maze = update(maze, codeOfExclamation, pos_x, pos_y, n, m);
+                maze = update_int(maze, codeOfExclamation, pos_x, pos_y, n, m);
 
                 new_pos_x = d.at(pos_x).at(pos_y).at(4);
                 new_pos_y = d.at(pos_x).at(pos_y).at(5);
