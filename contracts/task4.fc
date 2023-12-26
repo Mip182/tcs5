@@ -20,7 +20,9 @@ forall X -> (tuple) to_tuple (X x) asm "NOP";
         d~tpush(d);
     }
 
-    repeat(n*m) {
+
+
+    repeat(1000) {
         return (-1, -1, -1, null());
     }
 }
