@@ -6,7 +6,7 @@ forall X -> (tuple) to_tuple (X x) asm "NOP";
 
 }
 
-(tuple) update(tuple was, tuple new_val, int x, int y, int n, int m) {
+(tuple) update(tuple was, tuple new_val, int x, int y, int n, int m) inline {
     tuple new = empty_tuple();
 
     int i = 0;
@@ -37,7 +37,7 @@ forall X -> (tuple) to_tuple (X x) asm "NOP";
     return new;
 }
 
-(tuple) update_int(tuple was, int new_val, int x, int y, int n, int m) {
+(tuple) update_int(tuple was, int new_val, int x, int y, int n, int m) inline {
     tuple new = empty_tuple();
 
     int i = 0;
@@ -68,7 +68,7 @@ forall X -> (tuple) to_tuple (X x) asm "NOP";
     return new;
 }
 
-(int) is_less(tuple a, tuple b) {
+(int) is_less(tuple a, tuple b) inline {
     int x = a.at(0);
     int y = b.at(0);
 
