@@ -111,7 +111,7 @@ forall X -> (tuple) to_tuple (X x) asm "NOP";
     repeat (n) {
         tuple cur = empty_tuple();
         repeat (m) {
-            cur~tpush(default_value);
+            cur~tpush(to_tuple([1000, 1000, 1000, false, -1, -1]));
         }
 
         d~tpush(d);
@@ -144,7 +144,7 @@ forall X -> (tuple) to_tuple (X x) asm "NOP";
     }
 
     repeat(1000) {
-        tuple cur_min = default_value;
+        tuple cur_min = to_tuple([1000, 1000, 1000, false, -1, -1]);
         int pos_x = -1;
         int pos_y = -1;
 
