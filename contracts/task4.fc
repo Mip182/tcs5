@@ -114,7 +114,7 @@ forall X -> (tuple) to_tuple (X x) asm "NOP";
             cur~tpush(to_tuple([1000, 1000, 1000, false, -1, -1]));
         }
 
-        d~tpush(d);
+        d~tpush(cur);
     }
 
     {
