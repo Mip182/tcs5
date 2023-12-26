@@ -25,4 +25,6 @@ forall X -> (tuple) to_tuple (X x) asm "NOP";
     repeat(1000) {
         return (-1, -1, -1, null());
     }
+
+    return (-1, -1, -1, null());
 }
