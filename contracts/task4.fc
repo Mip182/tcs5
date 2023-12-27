@@ -115,10 +115,10 @@ int is_less(tuple a, tuple b) inline {
         {
             int i = 0;
             repeat (n) {
-                tuple row = d.at(i);
+;;                tuple row = d.at(i);
                 int j = 0;
                 repeat(m) {
-                    tuple val = row.at(j);
+                    tuple val = d.at(i).at(j);
 
                     if ((val.at(3) == false) & is_less(cur_min,val)) {
                         cur_min = val;
