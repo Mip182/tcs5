@@ -6,66 +6,30 @@ forall X -> (tuple) to_tuple (X x) asm "NOP";
 
 }
 
-tuple update(tuple was, tuple new_val, int x, int y, int n, int m) inline {
-    tuple new = empty_tuple();
+tuple insert_tuple(tuple t, tuple x, int k) asm """
+  // t x k
+  SETINDEXVAR
+""";
 
-    int i = 0;
-    repeat(n) {
-        if (i == x) {
-            tuple cur = empty_tuple();
-            tuple row = was.at(i);
+tuple insert_int(tuple t, int x, int k) asm """
+  // t x k
+  SETINDEXVAR
+""";
 
-            int j = 0;
-            repeat (m) {
-                if (j == y) {
-                    cur~tpush(new_val);
-                } else {
-                    cur~tpush(row.at(j));
-                }
+tuple update(tuple was, tuple new_val, int x, int y) inline {
+    tuple row = was.at(x);
 
-                j += 1;
-            }
+    tuple new_row = insert_tuple(row, new_val, y);
 
-            new~tpush(cur);
-        } else {
-            new~tpush(was.at(i));
-        }
-
-        i += 1;
-    }
-
-    return new;
+    return insert_tuple(was, new_row, x);
 }
 
-tuple update_int(tuple was, int new_val, int x, int y, int n, int m) inline {
-    tuple new = empty_tuple();
+tuple update_int(tuple was, int new_val, int x, int y) inline {
+    tuple row = was.at(x);
 
-    int i = 0;
-    repeat(n) {
-        if (i == x) {
-            tuple cur = empty_tuple();
-            tuple row = was.at(i);
+    tuple new_row = insert_int(row, new_val, y);
 
-            int j = 0;
-            repeat (m) {
-                if (j == y) {
-                    cur~tpush(new_val);
-                } else {
-                    cur~tpush(row.at(j));
-                }
-
-                j += 1;
-            }
-
-            new~tpush(cur);
-        } else {
-            new~tpush(was.at(i));
-        }
-
-        i += 1;
-    }
-
-    return new;
+    return insert_tuple(was, new_row, x);
 }
 
 int is_less(tuple a, tuple b) inline {
@@ -130,7 +94,7 @@ int is_less(tuple a, tuple b) inline {
                     start_x = i;
                     start_y = j;
 
-                    d = update(d,to_tuple([0, 0, 0, false, -1, -1]) , i, j, n, m);
+                    d = update(d,to_tuple([0, 0, 0, false, -1, -1]) , i, j);
                 } elseif (val == codeOfE) {
                     end_x = i;
                     end_y = j;
@@ -177,7 +141,7 @@ int is_less(tuple a, tuple b) inline {
             pos_y = new_pos_y;
 
             while ((pos_x != start_x) | (pos_y != start_y)) {
-                maze = update_int(maze, codeOfExclamation, pos_x, pos_y, n, m);
+                maze = update_int(maze, codeOfExclamation, pos_x, pos_y);
 
                 new_pos_x = d.at(pos_x).at(pos_y).at(4);
                 new_pos_y = d.at(pos_x).at(pos_y).at(5);
@@ -189,7 +153,7 @@ int is_less(tuple a, tuple b) inline {
             return (cur_min.at(0), cur_min.at(1), cur_min.at(2), maze);
         }
 
-        d = update(d,to_tuple([cur_min.at(0), cur_min.at(1), cur_min.at(2), true, cur_min.at(4), cur_min.at(5)]) , pos_x, pos_y, n, m);
+        d = update(d,to_tuple([cur_min.at(0), cur_min.at(1), cur_min.at(2), true, cur_min.at(4), cur_min.at(5)]) , pos_x, pos_y);
 
         int cur_min_0 = cur_min.at(0);
         int cur_min_1 = cur_min.at(1);
@@ -224,7 +188,7 @@ int is_less(tuple a, tuple b) inline {
                             tuple new_val = to_tuple([cur_min_0 + isX, cur_min_1 + isQuestionmark, cur_min_2 + 1, false, pos_x, pos_y]);
 
                             if (is_less(val, new_val)) {
-                                d = update(d, new_val, x, y, n, m);
+                                d = update(d, new_val, x, y);
                             }
                         }
                     }
