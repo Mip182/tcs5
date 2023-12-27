@@ -186,11 +186,11 @@ int is_less(tuple a, tuple b) inline {
                 pos_y = new_pos_y;
             }
 
-;;            if (cur_min.at(0) > 0) {
-;;                return (-1,0,0,null());
-;;            } else {
+            if (cur_min.at(0) > 0) {
+                return (-1,0,0,null());
+            } else {
                 return (cur_min.at(0), cur_min.at(1), cur_min.at(2), maze);
-;;            }
+            }
         }
 
         d = update(d,to_tuple([cur_min.at(0), cur_min.at(1), cur_min.at(2), true, cur_min.at(4), cur_min.at(5)]) , pos_x, pos_y, n, m);
