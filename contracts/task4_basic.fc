@@ -189,7 +189,7 @@ int is_less(tuple a, tuple b) inline {
             if (cur_min.at(0) > 0) {
                 return (-1,0,0,null());
             } else {
-                return (cur_min.at(0), cur_min.at(1), cur_min.at(2), maze);
+                return (-1, cur_min.at(1), cur_min.at(2), maze);
             }
         }
 
