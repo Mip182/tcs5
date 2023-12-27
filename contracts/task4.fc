@@ -193,11 +193,11 @@ int is_less(tuple a, tuple b) inline {
 ;;            }
         }
 
-        d = update(d,to_tuple([cur_min.at(0), cur_min.at(1), cur_min.at(2), true, cur_min.at(4), cur_min.at(5)]) , pos_x, pos_y, n, m);
-
         int cur_min_0 = cur_min.at(0);
         int cur_min_1 = cur_min.at(1);
         int cur_min_2 = cur_min.at(2);
+
+        d = update(d,to_tuple([cur_min_0, cur_min_1, cur_min_2, true, cur_min.at(4), cur_min.at(5)]) , pos_x, pos_y, n, m);
 
         int diff_x = -1;
         repeat(3) {
