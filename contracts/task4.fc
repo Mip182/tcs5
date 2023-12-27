@@ -57,13 +57,12 @@ int is_less(tuple a, tuple b) inline {
 
 (int, int, int, tuple) solve(int n, int m, tuple maze) method_id {
 ;;    #X, #?, # of moves, used, which cell is parent
-    tuple default_value = to_tuple([10000, 10000, 10000, false, -1, -1]);
+    tuple default_value = to_tuple([1000, 1000, 1000, false, -1, -1]);
 
     int codeOfExclamation = 33;
     int codeOfS = 83;
     int codeOfE = 69;
     int codeOfX = 88;
-    int codeOfPeriod = 46;
     int codeOfQuestion = 63;
 
     int start_x = -1;
@@ -75,7 +74,7 @@ int is_less(tuple a, tuple b) inline {
     repeat (n) {
         tuple cur = empty_tuple();
         repeat (m) {
-            cur~tpush(to_tuple([10000, 10000, 10000, false, -1, -1]));
+            cur~tpush(to_tuple([1000, 1000, 1000, false, -1, -1]));
         }
 
         d~tpush(cur);
@@ -107,18 +106,18 @@ int is_less(tuple a, tuple b) inline {
         }
     }
 
-    repeat(10000) {
-        tuple cur_min = to_tuple([10000, 10000, 10000, false, -1, -1]);
+    repeat(1000) {
+        tuple cur_min = to_tuple([1000, 1000, 1000, false, -1, -1]);
         int pos_x = -1;
         int pos_y = -1;
 
         {
             int i = 0;
             repeat (n) {
-;;                tuple row = d.at(i);
+                tuple row = d.at(i);
                 int j = 0;
                 repeat(m) {
-                    tuple val = d.at(i).at(j);
+                    tuple val = row.at(j);
 
                     if ((val.at(3) == false) & is_less(cur_min,val)) {
                         cur_min = val;
