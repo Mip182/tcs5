@@ -23,17 +23,13 @@
 
     int query_id = in_msg~load_uint(64);
 
-    int op = 0;
-    var signature = "";
+    slice new_in_msg = in_msg~load_bits(slice_bits(in_msg) - 32);
 
-    if (slice_bits(in_msg) == 32) {
-    } else {
-        signature = in_msg~load_bits(512);
-    }
-
-    op = in_msg~load_uint(32);
+    int op = in_msg~load_uint(32);
 
     if (op == 0x9df10277) {
+        var signature = in_msg~load_bits(512);
+
         cell info = in_msg~load_ref();
 
         slice cs = info.begin_parse();
