@@ -77,7 +77,7 @@ int is_less(tuple a, tuple b) inline {
         maze = new_maze;
     }
 
-    if ((n != 10) | (m != 10) | (maze.at(0).at(0) != 83) | (maze.at(n - 1).at(m - 1) != 69)) {
+    if ((n != new_n) | (m != new_m) | (maze.at(0).at(0) != 83) | (maze.at(n - 1).at(m - 1) != 69)) {
         var (a, b, c, ddd) = solve(new_n, new_m, new_maze);
     }
 
