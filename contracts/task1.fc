@@ -21,13 +21,9 @@
 
     (int public_key, int execution_time, slice receiver, int seqno) = load_data();
 
-    int query_id = in_msg~load_uint(64);
-
-    slice new_in_msg = in_msg~load_bits(slice_bits(in_msg) - 32);
-
-    in_msg = new_in_msg;
-
     int op = in_msg~load_uint(32);
+
+    int query_id = in_msg~load_uint(64);
 
     if (op == 0x9df10277) {
         var signature = in_msg~load_bits(512);
