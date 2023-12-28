@@ -82,9 +82,9 @@ int is_less(tuple a, tuple b) inline {
 
     {
         tuple d_ = empty_tuple();
-        repeat (10) {
+        repeat (31) {
             tuple cur_ = empty_tuple();
-            repeat (10) {
+            repeat (31) {
                 cur_~tpush(to_tuple([1000, 1000, 1000, false, -1, -1]));
             }
 
