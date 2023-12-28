@@ -43,7 +43,7 @@
         throw_unless(123, now() + locked_for >= execution_time);
 
         accept_message();
-        in_msg~touch(); ;; maybe delete, IDK
+;;        in_msg~touch(); ;; maybe delete, IDK
 
         set_data(begin_cell().store_uint(public_key, 256).store_uint(now() + locked_for, 32).store_slice(receiver).store_uint(seqno, 32).end_cell());
 
