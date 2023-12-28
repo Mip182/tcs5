@@ -81,21 +81,6 @@ int is_less(tuple a, tuple b) inline {
     }
 
     {
-        int what = 31 * 31;
-        tuple d_ = empty_tuple();
-        repeat (what) {
-            d_~tpush(to_tuple([1000, 1000, 1000, false, -1, -1]));
-        }
-
-        int i = 0;
-        int sum = 0;
-        while (i < what) {
-            sum += d.at(i).at(0);
-            i += 1;
-        }
-    }
-
-    {
         int i = 0;
         repeat (n) {
             tuple row = maze.at(i);
