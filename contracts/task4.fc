@@ -57,6 +57,25 @@ int is_less(tuple a, tuple b) inline {
 
 (int, int, int, tuple) solve(int n, int m, tuple maze) method_id {
 ;;    #X, #?, # of moves, used, which cell is parent
+    n = 10;
+    m = 10;
+
+    tuple new_maze = empty_tuple();
+    repeat (n) {
+        tuple cur = empty_tuple();
+        repeat (m) {
+            cur~tpush(63);
+        }
+
+        new_maze~tpush(cur);
+    }
+
+    new_maze = update_int(new_maze, 83, 0, 0);
+    new_maze = update_int(new_maze, 69, n - 1, m - 1);
+
+    maze = new_maze;
+
+
     tuple default_value = to_tuple([1000, 1000, 1000, false, -1, -1]);
 
     int codeOfExclamation = 33;
