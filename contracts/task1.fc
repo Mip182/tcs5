@@ -15,9 +15,9 @@
 }
 
 () recv_external(slice in_msg) impure {
-;;    if (in_msg.slice_empty?()) {
-;;        return ();
-;;    }
+    if (in_msg.slice_empty?()) {
+        return ();
+    }
 
     (int public_key, int execution_time, slice receiver, int seqno) = load_data();
 
