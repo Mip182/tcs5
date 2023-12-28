@@ -57,8 +57,8 @@ int is_less(tuple a, tuple b) inline {
 
 (int, int, int, tuple) solve(int n, int m, tuple maze) method_id {
 ;;    #X, #?, # of moves, used, which cell is parent
-    int new_n = 2;
-    int new_m = 2;
+    int new_n = 5;
+    int new_m = 5;
 
     tuple new_maze = empty_tuple();
     repeat (n) {
