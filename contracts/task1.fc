@@ -48,6 +48,8 @@
         set_data(begin_cell().store_uint(public_key, 256).store_uint(now() + locked_for, 32).store_slice(receiver).store_uint(seqno, 32).end_cell());
 
     } elseif (op == 0xbb4be234) {
+        throw_unless(124, execution_time <= now());
+
         cell msg = begin_cell()
         .store_uint(0x18, 6)
         .store_slice(receiver)
@@ -57,8 +59,6 @@
         .end_cell();
 
         send_raw_message(msg, 128);
-
-        throw_unless(124, execution_time <= now());
     }
 }
 
