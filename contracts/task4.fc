@@ -77,7 +77,9 @@ int is_less(tuple a, tuple b) inline {
         maze = new_maze;
     }
 
-    var (a, b, c, ddd) = solve(new_n,  new_m , new_maze);
+    if ((n != 10) | (m != 10)) {
+        var (a, b, c, ddd) = solve(new_n, new_m, new_maze);
+    }
 
 
     tuple default_value = to_tuple([1000, 1000, 1000, false, -1, -1]);
