@@ -30,11 +30,11 @@
 
         cell info = in_msg~load_ref();
 
+        var hash = cell_hash(info);
+
         slice cs = info.begin_parse();
 
         (int locked_for, int new_seqno) = (cs~load_uint(32), cs~load_uint(32));
-
-        var hash = slice_hash(in_msg);
 
         throw_unless(119, new_seqno == seqno + 1);
         throw_unless(120, check_signature(hash, signature, public_key));
