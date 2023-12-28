@@ -81,6 +81,18 @@ int is_less(tuple a, tuple b) inline {
     }
 
     {
+        tuple d_ = empty_tuple();
+        repeat (10) {
+            tuple cur_ = empty_tuple();
+            repeat (10) {
+                cur_~tpush(to_tuple([1000, 1000, 1000, false, -1, -1]));
+            }
+
+            d_~tpush(cur_);
+        }
+    }
+
+    {
         int i = 0;
         repeat (n) {
             tuple row = maze.at(i);
