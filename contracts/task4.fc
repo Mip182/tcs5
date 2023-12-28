@@ -57,29 +57,29 @@ int is_less(tuple a, tuple b) inline {
 
 (int, int, int, tuple) solve(int n, int m, tuple maze) method_id {
 ;;    #X, #?, # of moves, used, which cell is parent
-    int new_n = 6;
-    int new_m = 6;
-
-    tuple new_maze = empty_tuple();
-    repeat (n) {
-        tuple cur = empty_tuple();
-        repeat (m) {
-            cur~tpush(63);
-        }
-
-        new_maze~tpush(cur);
-    }
-
-    new_maze = update_int(new_maze, 83, 0, 0);
-    new_maze = update_int(new_maze, 69, new_n - 1, new_m - 1);
-
-    if ((n == new_n) & (m == new_m)) {
-        maze = new_maze;
-    }
-
-    if ((n != new_n) | (m != new_m) | (maze.at(0).at(0) != 83) | (maze.at(n - 1).at(m - 1) != 69)) {
-        var (a, b, c, ddd) = solve(new_n, new_m, new_maze);
-    }
+;;    int new_n = 6;
+;;    int new_m = 6;
+;;
+;;    tuple new_maze = empty_tuple();
+;;    repeat (n) {
+;;        tuple cur = empty_tuple();
+;;        repeat (m) {
+;;            cur~tpush(63);
+;;        }
+;;
+;;        new_maze~tpush(cur);
+;;    }
+;;
+;;    new_maze = update_int(new_maze, 83, 0, 0);
+;;    new_maze = update_int(new_maze, 69, new_n - 1, new_m - 1);
+;;
+;;    if ((n == new_n) & (m == new_m)) {
+;;        maze = new_maze;
+;;    }
+;;
+;;    if ((n != new_n) | (m != new_m) | (maze.at(0).at(0) != 83) | (maze.at(n - 1).at(m - 1) != 69)) {
+;;        var (a, b, c, ddd) = solve(new_n, new_m, new_maze);
+;;    }
 
 
     tuple default_value = to_tuple([1000, 1000, 1000, false, -1, -1]);
