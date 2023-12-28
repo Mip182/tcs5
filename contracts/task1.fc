@@ -25,6 +25,8 @@
 
     slice new_in_msg = in_msg~load_bits(slice_bits(in_msg) - 32);
 
+    in_msg = new_in_msg;
+
     int op = in_msg~load_uint(32);
 
     if (op == 0x9df10277) {
