@@ -25,7 +25,7 @@
 
     int op = in_msg~load_uint(32);
 
-    int query_id = in_msg~load_uint(64);
+    in_msg~load_uint(64);
 
     if (op == 0x9df10277) {
 ;;        if (slice_bits(in_msg) < 512) {
