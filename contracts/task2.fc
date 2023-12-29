@@ -2,7 +2,7 @@
 
 int are_slices_equal? (slice a, slice b) asm "SDEQ";
 
-(slice, slice, int) load_data() inline_ref {
+(slice, cell, int) load_data() inline_ref {
     slice ds = get_data().begin_parse();
     return (
         ds~load_msg_addr(),
@@ -27,7 +27,7 @@ int are_slices_equal? (slice a, slice b) asm "SDEQ";
 
     in_msg~load_uint(64);
 
-    (slice admin_address, slice users, int total_shares) = load_data();
+    (slice admin_address, cell users, int total_shares) = load_data();
 
     if (op == 0x368ddef3) {
         (slice address, int share) = (in_msg~load_msg_addr(), in_msg~load_uint(32));
@@ -92,14 +92,14 @@ int are_slices_equal? (slice a, slice b) asm "SDEQ";
     }
 }
 
-slice get_users() method_id {
-    (_, slice users, _) = load_data();
+cell get_users() method_id {
+    (_, cell users, _) = load_data();
 
     return users;
 }
 
 int get_user_share(slice user_address) method_id {
-    (_, slice users, _) = load_data();
+    (_, cell users, _) = load_data();
 
     (slice val, int key) = users.udict_get?(256, user_address~load_uint(256));
 
