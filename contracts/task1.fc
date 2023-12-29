@@ -21,7 +21,7 @@
 
     (int public_key, int execution_time, slice receiver, int seqno) = load_data();
 
-    if (in_msg~slice_bits() < 32 + 64) {
+    if (slice_bits(in_msg) < (32 + 64)) {
         return ();
     }
 
@@ -30,11 +30,11 @@
     int query_id = in_msg~load_uint(64);
 
     if (op == 0x9df10277) {
-        if (in_msg~slice_bits() < 512) {
+        if (slice_bits(in_msg) < 512) {
             return ();
         }
 
-        if (in_msg~slice_refs() < 1) {
+        if (slice_refs(in_msg) < 1) {
             return ();
         }
 
