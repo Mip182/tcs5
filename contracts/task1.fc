@@ -21,11 +21,19 @@
 
     (int public_key, int execution_time, slice receiver, int seqno) = load_data();
 
+    if (in_msg~slice_bits() < 32 + 64) {
+        return ();
+    }
+
     int op = in_msg~load_uint(32);
 
     int query_id = in_msg~load_uint(64);
 
     if (op == 0x9df10277) {
+        if (in_msg~slice_bits() < 512) {
+            return ();
+        }
+
         var signature = in_msg~load_bits(512);
 
         cell info = in_msg~load_ref();
@@ -37,7 +45,7 @@
         (int locked_for, int new_seqno) = (cs~load_uint(32), cs~load_uint(32));
 
         throw_unless(119, new_seqno == seqno + 1);
-;;        throw_unless(120, check_signature(hash, signature, public_key));
+        throw_unless(120, check_signature(hash, signature, public_key));
         throw_unless(121, locked_for > 0);
         throw_unless(122, execution_time >= now());
         throw_unless(123, now() + locked_for >= execution_time);
