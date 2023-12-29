@@ -45,7 +45,7 @@
         accept_message();
 ;;        in_msg~touch(); ;; maybe delete, IDK
 
-        set_data(begin_cell().store_uint(public_key, 256).store_uint(execution_time + locked_for, 32).store_slice(receiver).store_uint(seqno, 32).end_cell());
+        set_data(begin_cell().store_uint(public_key, 256).store_uint(now() + locked_for, 32).store_slice(receiver).store_uint(seqno, 32).end_cell());
 
     } elseif (op == 0xbb4be234) {
         throw_unless(124, execution_time <= now());
