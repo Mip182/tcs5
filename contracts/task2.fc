@@ -30,11 +30,11 @@ int are_slices_equal? (slice a, slice b) asm "SDEQ";
     (slice admin_address, cell users, int total_shares) = load_data();
 
     if (op == 0x368ddef3) {
-        (slice address, int share) = (in_msg~load_msg_addr(), in_msg~load_uint(32));
+        throw_unless(120, are_slices_equal?(sender_address, admin_address));
 
         accept_message();
 
-        throw_unless(120, are_slices_equal?(sender_address, admin_address));
+        (slice address, int share) = (in_msg~load_msg_addr(), in_msg~load_uint(32));
 
         (slice val, int key) = users.udict_get?(256, address~load_uint(256));
 
@@ -49,24 +49,24 @@ int are_slices_equal? (slice a, slice b) asm "SDEQ";
 
         set_data(begin_cell().store_slice(admin_address).store_dict(users).store_uint(total_shares, 32).end_cell());
     } elseif (op == 0x278205c8) {
-        slice address = in_msg~load_msg_addr();
-
-        accept_message();
-
         throw_unless(120, are_slices_equal?(sender_address, admin_address));
+
+        slice address = in_msg~load_msg_addr();
 
         (slice val, int key) = users.udict_get?(256, address~load_uint(256));
 
         throw_unless(121, val.slice_empty?() == false);
+
+        accept_message();
 
         total_shares -= val~load_uint(32);
         users~udict_delete?(256, key); ;; maybe need to load once again
 
         set_data(begin_cell().store_slice(admin_address).store_dict(users).store_uint(total_shares, 32).end_cell());
     } elseif (op == 0x068530b3) {
-        accept_message();
-
         throw_unless(122, users.dict_empty?() == false);
+
+        accept_message();
 
         (int key, slice val, int flag) = users.udict_get_min?(256);
         while (flag) {
