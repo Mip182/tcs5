@@ -19,8 +19,6 @@
         return ();
     }
 
-    (int public_key, int execution_time, slice receiver, int seqno) = load_data();
-
 ;;    if (slice_bits(in_msg) < (32 + 64)) {
 ;;        return ();
 ;;    }
@@ -54,6 +52,8 @@
 
         int new_execution_time = now() + locked_for;
 
+        (int public_key, int execution_time, slice receiver, int seqno) = load_data();
+
         throw_unless(119, new_seqno == (seqno + 1));
         throw_unless(120, check_signature(hash, signature, public_key));
         throw_unless(121, locked_for > 0);
@@ -66,6 +66,8 @@
         set_data(begin_cell().store_uint(public_key, 256).store_uint(new_execution_time, 32).store_slice(receiver).store_uint(new_seqno, 32).end_cell());
 
     } elseif (op == 0xbb4be234) {
+        (int public_key, int execution_time, slice receiver, int seqno) = load_data();
+
         throw_unless(124, execution_time <= now());
 
         cell msg = begin_cell()
