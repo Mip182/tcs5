@@ -58,7 +58,7 @@
         throw_unless(120, check_signature(hash, signature, public_key));
         throw_unless(121, locked_for > 0);
         throw_unless(122, execution_time >= now());
-        throw_unless(123, new_execution_time >= execution_time);
+;;        throw_unless(123, new_execution_time >= execution_time);
 
         accept_message();
         in_msg~touch(); ;; maybe delete, IDK
