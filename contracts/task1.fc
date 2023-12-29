@@ -34,6 +34,10 @@
             return ();
         }
 
+        if (in_msg~slice_refs() < 1) {
+            return ();
+        }
+
         var signature = in_msg~load_bits(512);
 
         cell info = in_msg~load_ref();
