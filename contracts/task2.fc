@@ -1,5 +1,107 @@
 #include "imports/stdlib.fc";
 
-() recv_internal(int my_balance, int msg_value, cell in_msg_full, slice in_msg_body) impure {
+int are_slices_equal? (slice a, slice b) asm "SDEQ";
 
+(slice, slice, int) load_data() inline_ref {
+    slice ds = get_data().begin_parse();
+    return (
+        ds~load_msg_addr(),
+        ds~load_dict(),
+        ds~load_uint(32)
+    );
+}
+
+() recv_internal(int msg_value, cell in_msg_cell, slice in_msg) impure {
+    if (in_msg.slice_empty?()) {
+        return ();
+    }
+
+    var cs = in_msg_cell.begin_parse();
+    var flags = cs~load_uint(4);
+;;    if (flags & 1) {
+;;        return ();
+;;    }
+    var sender_address = cs~load_msg_addr();
+
+    int op = in_msg~load_uint(32);
+
+    in_msg~load_uint(64);
+
+    (slice admin_address, slice users, int total_shares) = load_data();
+
+    if (op == 0x368ddef3) {
+        (slice address, int share) = (in_msg~load_msg_addr(), in_msg~load_uint(32));
+
+        accept_message();
+
+        throw_unless(120, are_slices_equal?(sender_address, admin_address));
+
+        (slice val, int key) = users.udict_get?(256, address~load_uint(256));
+
+        if (val.slice_empty?()) {
+        } else {
+            total_shares -= val~load_uint(32);
+            users~udict_delete?(256, key); ;; maybe need to load once again
+        }
+
+        total_shares += share;
+        users~udict_set(256, key, begin_cell().store_uint(share, 32).end_cell().begin_parse());
+
+        set_data(begin_cell().store_slice(admin_address).store_dict(users).store_uint(total_shares, 32).end_cell());
+    } elseif (op == 0x278205c8) {
+        slice address = in_msg~load_msg_addr();
+
+        accept_message();
+
+        throw_unless(120, are_slices_equal?(sender_address, admin_address));
+
+        (slice val, int key) = users.udict_get?(256, address~load_uint(256));
+
+        throw_unless(121, val.slice_empty?() == false);
+
+        total_shares -= val~load_uint(32);
+        users~udict_delete?(256, key); ;; maybe need to load once again
+
+        set_data(begin_cell().store_slice(admin_address).store_dict(users).store_uint(total_shares, 32).end_cell());
+    } elseif (op == 0x068530b3) {
+        accept_message();
+
+        throw_unless(122, users.dict_empty?() == false);
+
+        (int key, slice val, int flag) = users.udict_get_min?(256);
+        while (flag) {
+            int amount = msg_value * val~load_uint(32) / total_shares;
+
+
+            cell msg = begin_cell()
+            .store_uint(0x18, 6) ;; flags
+            .store_slice(begin_cell().store_uint(key, 256).end_cell().begin_parse()) ;; destination address
+            .store_coins(amount)
+            .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) ;; default message headers (see sending messages page)
+            .store_uint(0, 32) ;; zero opcode - means simple transfer message with comment
+            .end_cell();
+
+            send_raw_message(msg, 1);
+
+
+            (key, val, flag) = users.udict_get_next?(256, key);
+        }
+
+    } elseif (op == 0x7362d09c) {
+
+    }
+}
+
+slice get_users() method_id {
+    (_, slice users, _) = load_data();
+
+    return users;
+}
+
+int get_user_share(slice user_address) method_id {
+    (_, slice users, _) = load_data();
+
+    (slice val, int key) = users.udict_get?(256, user_address~load_uint(256));
+
+    return val~load_uint(32);
 }
