@@ -12,9 +12,9 @@ int are_slices_equal? (slice a, slice b) asm "SDEQ";
 }
 
 () recv_internal(int msg_value, cell in_msg_cell, slice in_msg) impure {
-    if (in_msg.slice_bits() < 32) {
-        return ();
-    }
+;;    if (in_msg.slice_bits() < 32) {
+;;        return ();
+;;    }
 
     int op = in_msg~load_uint(32);
 
