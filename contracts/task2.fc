@@ -43,11 +43,11 @@ int are_slices_equal? (slice a, slice b) asm "SDEQ";
         if (val.slice_empty?()) {
         } else {
             total_shares -= val~load_uint(32);
-            users~udict_delete?(256, key); ;; maybe need to load once again
+            users~udict_delete?(256, y); ;; maybe need to load once again
         }
 
         total_shares += share;
-        users~udict_set(256, key, begin_cell().store_uint(share, 32).end_cell().begin_parse());
+        users~udict_set(256, y, begin_cell().store_uint(share, 32).end_cell().begin_parse());
 
         set_data(begin_cell().store_slice(admin_address).store_dict(users).store_uint(total_shares, 32).end_cell());
     } elseif (op == 0x278205c8) {
@@ -73,7 +73,7 @@ int are_slices_equal? (slice a, slice b) asm "SDEQ";
         accept_message();
 
         total_shares -= val~load_uint(32);
-        users~udict_delete?(256, key); ;; maybe need to load once again
+        users~udict_delete?(256, y); ;; maybe need to load once again
 
         set_data(begin_cell().store_slice(admin_address).store_dict(users).store_uint(total_shares, 32).end_cell());
     } elseif (op == 0x068530b3) {
