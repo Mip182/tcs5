@@ -16,13 +16,6 @@ int are_slices_equal? (slice a, slice b) asm "SDEQ";
         return ();
     }
 
-    var cs = in_msg_cell.begin_parse();
-    var flags = cs~load_uint(4);
-;;    if (flags & 1) {
-;;        return ();
-;;    }
-    var sender_address = cs~load_msg_addr();
-
     int op = in_msg~load_uint(32);
 
     int query_id = in_msg~load_uint(64);
@@ -30,6 +23,13 @@ int are_slices_equal? (slice a, slice b) asm "SDEQ";
     (slice admin_address, cell users, int total_shares) = load_data();
 
     if (op == 0x368ddef3) {
+        var cs = in_msg_cell.begin_parse();
+        var flags = cs~load_uint(4);
+        ;;    if (flags & 1) {
+        ;;        return ();
+        ;;    }
+        var sender_address = cs~load_msg_addr();
+
         throw_unless(120, are_slices_equal?(sender_address, admin_address));
 
         accept_message();
@@ -51,6 +51,13 @@ int are_slices_equal? (slice a, slice b) asm "SDEQ";
 
         set_data(begin_cell().store_slice(admin_address).store_dict(users).store_uint(total_shares, 32).end_cell());
     } elseif (op == 0x278205c8) {
+        var cs = in_msg_cell.begin_parse();
+        var flags = cs~load_uint(4);
+        ;;    if (flags & 1) {
+        ;;        return ();
+        ;;    }
+        var sender_address = cs~load_msg_addr();
+
         throw_unless(120, are_slices_equal?(sender_address, admin_address));
 
         slice address = in_msg~load_msg_addr();
@@ -99,6 +106,13 @@ int are_slices_equal? (slice a, slice b) asm "SDEQ";
 
         int amount = in_msg~load_coins();
 
+        var cs = in_msg_cell.begin_parse();
+        var flags = cs~load_uint(4);
+        ;;    if (flags & 1) {
+        ;;        return ();
+        ;;    }
+        var sender_address = cs~load_msg_addr();
+
         (int key, slice val, int flag) = users.udict_get_min?(256);
         while (flag) {
             int jetton_amount = amount * val~load_uint(32) / total_shares;
@@ -121,6 +135,7 @@ int are_slices_equal? (slice a, slice b) asm "SDEQ";
             .end_cell();
 
             send_raw_message(msg, 1);
+
 
             (key, val, flag) = users.udict_get_next?(256, key);
         }
