@@ -1,6 +1,8 @@
 #include "imports/stdlib.fc";
 
-int are_slices_equal? (slice a, slice b) asm "SDEQ";
+int are_slices_equal? (slice a, slice b) {
+    return a.slice_hash() == b.slice_hash();
+}
 
 (slice, cell, int) load_data() inline_ref {
     slice ds = get_data().begin_parse();
