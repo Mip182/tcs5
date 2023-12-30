@@ -12,7 +12,7 @@ int are_slices_equal? (slice a, slice b) asm "SDEQ";
 }
 
 () recv_internal(int msg_value, cell in_msg_cell, slice in_msg) impure {
-    if (in_msg.slice_bits() < (32 + 64)) {
+    if (in_msg.slice_bits() < 32) {
         return ();
     }
 
@@ -91,6 +91,7 @@ int are_slices_equal? (slice a, slice b) asm "SDEQ";
         }
 
     } elseif (op == 0x7362d09c) {
+        accept_message();
 
     }
 }
