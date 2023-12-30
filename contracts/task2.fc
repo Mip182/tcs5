@@ -94,6 +94,7 @@ int are_slices_equal? (slice a, slice b) asm "SDEQ";
 
     } elseif (op == 0x7362d09c) {
         throw_unless(122, users.dict_empty?() == false);
+
         accept_message();
 
         int amount = in_msg~load_coins();
@@ -119,6 +120,7 @@ int are_slices_equal? (slice a, slice b) asm "SDEQ";
             .store_uint(0, 1)
             .end_cell();
 
+            send_raw_message(msg, 1);
 
             (key, val, flag) = users.udict_get_next?(256, key);
         }
