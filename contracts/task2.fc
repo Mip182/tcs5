@@ -7,7 +7,7 @@ int are_slices_equal? (slice a, slice b) asm "SDEQ";
     return (
         ds~load_msg_addr(),
         ds~load_dict(),
-        slice_empty?(ds) ? 0 : ds~load_uint(64)
+        slice_empty?(ds) ? 0 : ds~load_uint(32)
     );
 }
 
@@ -49,7 +49,7 @@ int are_slices_equal? (slice a, slice b) asm "SDEQ";
         total_shares += share;
         users~udict_set(256, key, begin_cell().store_uint(share, 32).end_cell().begin_parse());
 
-        set_data(begin_cell().store_slice(admin_address).store_dict(users).store_uint(total_shares, 64).end_cell());
+        set_data(begin_cell().store_slice(admin_address).store_dict(users).store_uint(total_shares, 32).end_cell());
     } elseif (op == 0x278205c8) {
         in_msg~load_uint(64);
 
@@ -75,7 +75,7 @@ int are_slices_equal? (slice a, slice b) asm "SDEQ";
         total_shares -= val~load_uint(32);
         users~udict_delete?(256, key); ;; maybe need to load once again
 
-        set_data(begin_cell().store_slice(admin_address).store_dict(users).store_uint(total_shares, 64).end_cell());
+        set_data(begin_cell().store_slice(admin_address).store_dict(users).store_uint(total_shares, 32).end_cell());
     } elseif (op == 0x068530b3) {
         in_msg~load_uint(64);
 
