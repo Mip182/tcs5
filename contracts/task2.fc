@@ -12,7 +12,7 @@ int are_slices_equal? (slice a, slice b) asm "SDEQ";
 }
 
 () recv_internal(int msg_value, cell in_msg_cell, slice in_msg) impure {
-    if (in_msg.slice_empty?()) {
+    if (in_msg.slice_bits() < (32 + 64)) {
         return ();
     }
 
@@ -36,7 +36,9 @@ int are_slices_equal? (slice a, slice b) asm "SDEQ";
 
         (slice address, int share) = (in_msg~load_msg_addr(), in_msg~load_uint(32));
 
-        (slice val, int key) = users.udict_get?(256, address~load_uint(256));
+        (int x, int y) = address.parse_std_addr();
+
+        (slice val, int key) = users.udict_get?(256, y);
 
         if (val.slice_empty?()) {
         } else {
@@ -53,7 +55,9 @@ int are_slices_equal? (slice a, slice b) asm "SDEQ";
 
         slice address = in_msg~load_msg_addr();
 
-        (slice val, int key) = users.udict_get?(256, address~load_uint(256));
+        (int x, int y) = address.parse_std_addr();
+
+        (slice val, int key) = users.udict_get?(256, y);
 
         throw_unless(121, val.slice_empty?() == false);
 
@@ -71,7 +75,6 @@ int are_slices_equal? (slice a, slice b) asm "SDEQ";
         (int key, slice val, int flag) = users.udict_get_min?(256);
         while (flag) {
             int amount = msg_value * val~load_uint(32) / total_shares;
-
 
             cell msg = begin_cell()
             .store_uint(0x18, 6) ;; flags
@@ -101,7 +104,9 @@ cell get_users() method_id {
 int get_user_share(slice user_address) method_id {
     (_, cell users, _) = load_data();
 
-    (slice val, int key) = users.udict_get?(256, user_address~load_uint(256));
+    (int x, int y) = user_address.parse_std_addr();
+
+    (slice val, int key) = users.udict_get?(256, y);
 
     return val~load_uint(32);
 }
