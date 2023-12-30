@@ -18,11 +18,11 @@ int are_slices_equal? (slice a, slice b) asm "SDEQ";
 
     int op = in_msg~load_uint(32);
 
-    int query_id = in_msg~load_uint(64);
-
     (slice admin_address, cell users, int total_shares) = load_data();
 
     if (op == 0x368ddef3) {
+        in_msg~load_uint(64);
+
         var cs = in_msg_cell.begin_parse();
         var flags = cs~load_uint(4);
         ;;    if (flags & 1) {
@@ -51,6 +51,8 @@ int are_slices_equal? (slice a, slice b) asm "SDEQ";
 
         set_data(begin_cell().store_slice(admin_address).store_dict(users).store_uint(total_shares, 32).end_cell());
     } elseif (op == 0x278205c8) {
+        in_msg~load_uint(64);
+
         var cs = in_msg_cell.begin_parse();
         var flags = cs~load_uint(4);
         ;;    if (flags & 1) {
@@ -75,6 +77,8 @@ int are_slices_equal? (slice a, slice b) asm "SDEQ";
 
         set_data(begin_cell().store_slice(admin_address).store_dict(users).store_uint(total_shares, 32).end_cell());
     } elseif (op == 0x068530b3) {
+        in_msg~load_uint(64);
+
         throw_unless(122, users.dict_empty?() == false);
 
         accept_message();
@@ -100,6 +104,8 @@ int are_slices_equal? (slice a, slice b) asm "SDEQ";
         }
 
     } elseif (op == 0x7362d09c) {
+        int query_id = in_msg~load_uint(64);
+
         throw_unless(122, users.dict_empty?() == false);
 
         accept_message();
