@@ -7,7 +7,7 @@ int are_slices_equal? (slice a, slice b) asm "SDEQ";
     return (
         ds~load_msg_addr(),
         ds~load_dict(),
-        ds~load_uint(32)
+        slice_empty?(ds) ? 0 : ds~load_uint(32)
     );
 }
 
