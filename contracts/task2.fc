@@ -10,7 +10,7 @@
 }
 
 () recv_internal(int msg_value, cell in_msg_cell, slice in_msg) impure {
-    if (in_msg.slice_bits() < (32 + 64)) {
+    if (in_msg.slice_bits() < 32) {
         return ();
     }
 
@@ -22,10 +22,7 @@
         in_msg~load_uint(64);
 
         var cs = in_msg_cell.begin_parse();
-        var flags = cs~load_uint(4);
-        ;;    if (flags & 1) {
-        ;;        return ();
-        ;;    }
+        cs~load_uint(4);
         var sender_address = cs~load_msg_addr();
 
         throw_unless(120, equal_slices(sender_address, admin_address));
@@ -49,10 +46,7 @@
         in_msg~load_uint(64);
 
         var cs = in_msg_cell.begin_parse();
-        var flags = cs~load_uint(4);
-        ;;    if (flags & 1) {
-        ;;        return ();
-        ;;    }
+        cs~load_uint(4);
         var sender_address = cs~load_msg_addr();
 
         throw_unless(120, equal_slices(sender_address, admin_address));
