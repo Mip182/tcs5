@@ -95,46 +95,45 @@
         }
 
     } elseif (op == 0x7362d09c) {
-        int query_id = in_msg~load_uint(64);
-
-        throw_unless(122, users.dict_empty?() == false);
-
-        int amount = in_msg~load_coins();
-
-        var cs = in_msg_cell.begin_parse();
-        var flags = cs~load_uint(4);
-        ;;    if (flags & 1) {
-        ;;        return ();
-        ;;    }
-        var sender_address = cs~load_msg_addr();
-
-        (int key, slice val, int flag) = users.udict_get_min?(256);
-        while (flag) {
-            int jetton_amount = amount * val.preload_uint(32) / total_shares;
-
-            slice destination_address = begin_cell().store_uint(4, 3).store_uint(0, 8).store_uint(key, 256).end_cell().begin_parse();
-
-            cell msg = begin_cell()
-            .store_uint(0x18, 6)
-            .store_slice(sender_address)
-            .store_coins(20000000)
-            .store_uint(1, 1 + 4 + 4 + 64 + 32 + 1 + 1)
-            .store_uint(0x0f8a7ea5, 32)
-            .store_uint(query_id, 64)
-            .store_coins(jetton_amount)
-            .store_slice(destination_address)
-            .store_slice(destination_address)
-            .store_uint(0, 1)
-            .store_coins(1)
-            .store_uint(0, 1)
-            .end_cell();
-
-            send_raw_message(msg, 1);
-
-
-            (key, val, flag) = users.udict_get_next?(256, key);
-        }
-
+;;        int query_id = in_msg~load_uint(64);
+;;
+;;        throw_unless(122, users.dict_empty?() == false);
+;;
+;;        int amount = in_msg~load_coins();
+;;
+;;        var cs = in_msg_cell.begin_parse();
+;;        var flags = cs~load_uint(4);
+;;        ;;    if (flags & 1) {
+;;        ;;        return ();
+;;        ;;    }
+;;        var sender_address = cs~load_msg_addr();
+;;
+;;        (int key, slice val, int flag) = users.udict_get_min?(256);
+;;        while (flag) {
+;;            int jetton_amount = amount * val.preload_uint(32) / total_shares;
+;;
+;;            slice destination_address = begin_cell().store_uint(4, 3).store_uint(0, 8).store_uint(key, 256).end_cell().begin_parse();
+;;
+;;            cell msg = begin_cell()
+;;            .store_uint(0x18, 6)
+;;            .store_slice(sender_address)
+;;            .store_coins(20000000)
+;;            .store_uint(1, 1 + 4 + 4 + 64 + 32 + 1 + 1)
+;;            .store_uint(0x0f8a7ea5, 32)
+;;            .store_uint(query_id, 64)
+;;            .store_coins(jetton_amount)
+;;            .store_slice(destination_address)
+;;            .store_slice(destination_address)
+;;            .store_uint(0, 1)
+;;            .store_coins(1)
+;;            .store_uint(0, 1)
+;;            .end_cell();
+;;
+;;            send_raw_message(msg, 1);
+;;
+;;
+;;            (key, val, flag) = users.udict_get_next?(256, key);
+;;        }
     }
 }
 
