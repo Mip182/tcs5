@@ -38,7 +38,7 @@
 
         if (val.slice_empty?()) {
         } else {
-            total_shares -= val~load_uint(32);
+            total_shares -= val.preload_uint(32);
             users~udict_delete?(256, y); ;; maybe need to load once again
         }
 
@@ -66,7 +66,7 @@
 
         throw_unless(121, val.slice_empty?() == false);
 
-        total_shares -= val~load_uint(32);
+        total_shares -= val.preload_uint(32);
         users~udict_delete?(256, y); ;; maybe need to load once again
 
         set_data(begin_cell().store_slice(admin_address).store_dict(users).store_uint(total_shares, 32).end_cell());
@@ -77,7 +77,7 @@
 
         (int key, slice val, int flag) = users.udict_get_min?(256);
         while (flag) {
-            int amount = msg_value * val~load_uint(32) / total_shares;
+            int amount = msg_value * val.preload_uint(32) / total_shares;
 
             slice destination_address = begin_cell().store_uint(4, 3).store_uint(0, 8).store_uint(key, 256).end_cell().begin_parse();
 
@@ -111,7 +111,7 @@
 
         (int key, slice val, int flag) = users.udict_get_min?(256);
         while (flag) {
-            int jetton_amount = amount * val~load_uint(32) / total_shares;
+            int jetton_amount = amount * val.preload_uint(32) / total_shares;
 
             slice destination_address = begin_cell().store_uint(4, 3).store_uint(0, 8).store_uint(key, 256).end_cell().begin_parse();
 
@@ -152,6 +152,6 @@ int get_user_share(slice user_address) method_id {
 
     (slice val, int key) = users.udict_get?(256, y);
 
-    return val~load_uint(32);
+    return val.preload_uint(32);
 }
 
