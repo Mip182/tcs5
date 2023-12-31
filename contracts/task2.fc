@@ -30,7 +30,7 @@
 
         throw_unless(120, equal_slices(sender_address, admin_address));
 
-        accept_message();
+;;        accept_message();
 
         (slice address, int share) = (in_msg~load_msg_addr(), in_msg~load_uint(32));
 
