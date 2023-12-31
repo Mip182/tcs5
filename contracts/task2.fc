@@ -34,12 +34,11 @@
 
         (int x, int y) = address.parse_std_addr();
 
-        (slice val, int key) = users.udict_get?(256, y);
+        (slice val, int f) = users.udict_get?(256, y);
 
-        if (val.slice_empty?()) {
-        } else {
+        if (f) {
             total_shares -= val.preload_uint(32);
-            users~udict_delete?(256, y); ;; maybe need to load once again
+            users~udict_delete?(256, y);
         }
 
         total_shares += share;
@@ -62,12 +61,12 @@
 
         (int x, int y) = address.parse_std_addr();
 
-        (slice val, int key) = users.udict_get?(256, y);
+        (slice val, int f) = users.udict_get?(256, y);
 
-        throw_unless(121, val.slice_empty?() == false);
+        throw_unless(121, f == true);
 
-;;        total_shares -= val.preload_uint(32);
-;;        users~udict_delete?(256, y); ;; maybe need to load once again
+        total_shares -= val.preload_uint(32);
+        users~udict_delete?(256, y);
 
         set_data(begin_cell().store_slice(admin_address).store_dict(users).store_uint(total_shares, 32).end_cell());
     } elseif (op == 0x068530b3) {
