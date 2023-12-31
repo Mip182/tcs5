@@ -162,3 +162,4 @@ int get_user_share(slice user_address) method_id {
 
     return val~load_uint(32);
 }
+
