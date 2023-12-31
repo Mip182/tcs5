@@ -1,11 +1,13 @@
 #include "imports/stdlib.fc";
 
+global int total_shares;
+
 (slice, cell, int) load_data() inline_ref {
     slice ds = get_data().begin_parse();
     return (
         ds~load_msg_addr(),
         ds~load_dict(),
-        slice_empty?(ds) ? 0 : ds~load_uint(32)
+        total_shares
     );
 }
 
