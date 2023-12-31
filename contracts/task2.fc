@@ -1,13 +1,11 @@
 #include "imports/stdlib.fc";
 
-global int G;
-
 (slice, cell, int) load_data() inline_ref {
     slice ds = get_data().begin_parse();
     return (
         ds~load_msg_addr(),
         ds~load_dict(),
-        slice_empty?(ds) ? 0 : -1
+        slice_empty?(ds) ? 0 : ds~load_uint(32)
     );
 }
 
@@ -18,13 +16,7 @@ global int G;
 
     int op = in_msg~load_uint(32);
 
-    (slice admin_address, cell users, int is_there_total_shares) = load_data();
-
-    int total_shares = 0;
-
-    if (is_there_total_shares) {
-        total_shares = G;
-    }
+    (slice admin_address, cell users, int total_shares) = load_data();
 
     if (op == 0x368ddef3) {
         in_msg~load_uint(64);
@@ -37,7 +29,7 @@ global int G;
 
         (slice address, int share) = (in_msg~load_msg_addr(), in_msg~load_uint(32));
 
-        (int x, int y) = address.parse_std_addr();
+        (_, int y) = address.parse_std_addr();
 
         (slice val, int f) = users.udict_get?(256, y);
 
@@ -49,9 +41,7 @@ global int G;
         total_shares += share;
         users~udict_set(256, y, begin_cell().store_uint(share, 32).end_cell().begin_parse());
 
-        G = total_shares;
-
-        set_data(begin_cell().store_slice(admin_address).store_dict(users).store_uint(0, 1).end_cell());
+        set_data(begin_cell().store_slice(admin_address).store_dict(users).store_uint(total_shares, 32).end_cell());
     } elseif (op == 0x278205c8) {
         in_msg~load_uint(64);
 
@@ -63,7 +53,7 @@ global int G;
 
         slice address = in_msg~load_msg_addr();
 
-        (int x, int y) = address.parse_std_addr();
+        (_, int y) = address.parse_std_addr();
 
         (slice val, int f) = users.udict_get?(256, y);
 
@@ -72,9 +62,7 @@ global int G;
         total_shares -= val.preload_uint(32);
         users~udict_delete?(256, y);
 
-        G = total_shares;
-
-        set_data(begin_cell().store_slice(admin_address).store_dict(users).store_uint(0, 1).end_cell());
+        set_data(begin_cell().store_slice(admin_address).store_dict(users).store_uint(total_shares, 32).end_cell());
     } elseif (op == 0x068530b3) {
         in_msg~load_uint(64);
 
@@ -108,10 +96,7 @@ global int G;
         int amount = in_msg~load_coins();
 
         var cs = in_msg_cell.begin_parse();
-        var flags = cs~load_uint(4);
-        ;;    if (flags & 1) {
-        ;;        return ();
-        ;;    }
+        cs~load_uint(4);
         var sender_address = cs~load_msg_addr();
 
         (int key, slice val, int flag) = users.udict_get_min?(256);
@@ -155,9 +140,9 @@ cell get_users() method_id {
 int get_user_share(slice user_address) method_id {
     (_, cell users, _) = load_data();
 
-    (int x, int y) = user_address.parse_std_addr();
+    (_, int y) = user_address.parse_std_addr();
 
-    (slice val, int key) = users.udict_get?(256, y);
+    (slice val, _) = users.udict_get?(256, y);
 
     return val.preload_uint(32);
 }
