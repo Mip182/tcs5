@@ -1,13 +1,13 @@
 #include "imports/stdlib.fc";
 
-global int total_shares;
+global int G;
 
 (slice, cell, int) load_data() inline_ref {
     slice ds = get_data().begin_parse();
     return (
         ds~load_msg_addr(),
         ds~load_dict(),
-        total_shares
+        slice_empty?(ds) ? 0 : -1
     );
 }
 
@@ -18,7 +18,13 @@ global int total_shares;
 
     int op = in_msg~load_uint(32);
 
-    (slice admin_address, cell users, int total_shares) = load_data();
+    (slice admin_address, cell users, int is_there_total_shares) = load_data();
+
+    int total_shares = 0;
+
+    if (is_there_total_shares) {
+        total_shares = G;
+    }
 
     if (op == 0x368ddef3) {
         in_msg~load_uint(64);
@@ -43,7 +49,9 @@ global int total_shares;
         total_shares += share;
         users~udict_set(256, y, begin_cell().store_uint(share, 32).end_cell().begin_parse());
 
-        set_data(begin_cell().store_slice(admin_address).store_dict(users).store_uint(total_shares, 32).end_cell());
+        G = total_shares;
+
+        set_data(begin_cell().store_slice(admin_address).store_dict(users).store_uint(0, 1).end_cell());
     } elseif (op == 0x278205c8) {
         in_msg~load_uint(64);
 
@@ -64,7 +72,9 @@ global int total_shares;
         total_shares -= val.preload_uint(32);
         users~udict_delete?(256, y);
 
-        set_data(begin_cell().store_slice(admin_address).store_dict(users).store_uint(total_shares, 32).end_cell());
+        G = total_shares;
+
+        set_data(begin_cell().store_slice(admin_address).store_dict(users).store_uint(0, 1).end_cell());
     } elseif (op == 0x068530b3) {
         in_msg~load_uint(64);
 
