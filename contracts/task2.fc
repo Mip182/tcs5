@@ -30,8 +30,6 @@
 
         throw_unless(120, equal_slices(sender_address, admin_address));
 
-;;        accept_message();
-
         (slice address, int share) = (in_msg~load_msg_addr(), in_msg~load_uint(32));
 
         (int x, int y) = address.parse_std_addr();
@@ -68,8 +66,6 @@
 
         throw_unless(121, val.slice_empty?() == false);
 
-        accept_message();
-
         total_shares -= val~load_uint(32);
         users~udict_delete?(256, y); ;; maybe need to load once again
 
@@ -78,8 +74,6 @@
         in_msg~load_uint(64);
 
         throw_unless(122, users.dict_empty?() == false);
-
-        accept_message();
 
         (int key, slice val, int flag) = users.udict_get_min?(256);
         while (flag) {
@@ -105,8 +99,6 @@
         int query_id = in_msg~load_uint(64);
 
         throw_unless(122, users.dict_empty?() == false);
-
-        accept_message();
 
         int amount = in_msg~load_coins();
 
