@@ -1,7 +1,5 @@
 #include "imports/stdlib.fc";
 
-int are_slices_equal? (slice a, slice b) asm "SDEQ";
-
 (slice, cell, int) load_data() inline_ref {
     slice ds = get_data().begin_parse();
     return (
@@ -30,7 +28,7 @@ int are_slices_equal? (slice a, slice b) asm "SDEQ";
         ;;    }
         var sender_address = cs~load_msg_addr();
 
-        throw_unless(120, are_slices_equal?(sender_address, admin_address));
+        throw_unless(120, equal_slices(sender_address, admin_address));
 
         accept_message();
 
@@ -60,7 +58,7 @@ int are_slices_equal? (slice a, slice b) asm "SDEQ";
         ;;    }
         var sender_address = cs~load_msg_addr();
 
-        throw_unless(120, are_slices_equal?(sender_address, admin_address));
+        throw_unless(120, equal_slices(sender_address, admin_address));
 
         slice address = in_msg~load_msg_addr();
 
