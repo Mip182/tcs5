@@ -25,7 +25,7 @@
 
     int op = in_msg~load_uint(32);
 
-    in_msg~skip_bits(64);
+    in_msg~load_uint(64);
 
     if (op == 0x9df10277) {
 ;;        if (slice_bits(in_msg) < 512) {
@@ -66,7 +66,7 @@
         set_data(begin_cell().store_uint(public_key, 256).store_uint(new_execution_time, 32).store_slice(receiver).store_uint(new_seqno, 32).end_cell());
 
     } elseif (op == 0xbb4be234) {
-        (_, int execution_time, slice receiver, _) = load_data();
+        (int public_key, int execution_time, slice receiver, int seqno) = load_data();
 
         throw_unless(124, execution_time <= now());
 

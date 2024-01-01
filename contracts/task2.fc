@@ -19,10 +19,10 @@
     (slice admin_address, cell users, int total_shares) = load_data();
 
     if (op == 0x368ddef3) {
-        in_msg~skip_bits(64);
+        in_msg~load_uint(64);
 
         var cs = in_msg_cell.begin_parse();
-        cs~skip_bits(4);
+        cs~load_uint(4);
         var sender_address = cs~load_msg_addr();
 
         throw_unless(120, equal_slices(sender_address, admin_address));
@@ -43,10 +43,10 @@
 
         set_data(begin_cell().store_slice(admin_address).store_dict(users).store_uint(total_shares, 32).end_cell());
     } elseif (op == 0x278205c8) {
-        in_msg~skip_bits(64);
+        in_msg~load_uint(64);
 
         var cs = in_msg_cell.begin_parse();
-        cs~skip_bits(4);
+        cs~load_uint(4);
         var sender_address = cs~load_msg_addr();
 
         throw_unless(120, equal_slices(sender_address, admin_address));
@@ -64,7 +64,7 @@
 
         set_data(begin_cell().store_slice(admin_address).store_dict(users).store_uint(total_shares, 32).end_cell());
     } elseif (op == 0x068530b3) {
-        in_msg~skip_bits(64);
+        in_msg~load_uint(64);
 
         throw_unless(122, users.dict_empty?() == false);
 
@@ -96,7 +96,7 @@
         int amount = in_msg~load_coins();
 
         var cs = in_msg_cell.begin_parse();
-        cs~skip_bits(4);
+        cs~load_uint(4);
         var sender_address = cs~load_msg_addr();
 
         (int key, slice val, int flag) = users.udict_get_min?(256);
@@ -140,9 +140,9 @@ cell get_users() method_id {
 int get_user_share(slice user_address) method_id {
     (_, cell users, _) = load_data();
 
-    (_, int y) = user_address.parse_std_addr();
+    (int x, int y) = user_address.parse_std_addr();
 
-    (slice val, _) = users.udict_get?(256, y);
+    (slice val, int key) = users.udict_get?(256, y);
 
     return val.preload_uint(32);
 }
