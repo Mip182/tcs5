@@ -128,7 +128,7 @@ int version() method_id {
     return -2;
 ;;    slice cs = get_data().begin_parse();
 
-;;    return slice_empty?(cs) ? 0 : cs~load_uint(32);
+;;    return slice_data_empty?(cs) ? 0 : cs~load_uint(32);
 }
 
 ;; <<<<< Custom version-specific code begins
@@ -149,4 +149,3 @@ cell migrate_one(cell old_storage) { ;; it's just a placeholder that is required
 }
 
 ;; Custom version-specific code ends >>>>>
-
