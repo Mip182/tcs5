@@ -36,7 +36,7 @@ forall X -> (tuple) to_tuple (X x) asm "NOP";
 
     slice ds = get_data().begin_parse();
     cell storage = ds~load_ref();
-    int current_version = ds~load_uint(32);
+    int current_version = slice_empty?(ds) ? 0 : ds~load_uint(32);
 
 ;;    if (current_version != expected_version) {
 ;;        (int key, slice val, int flag) = migrations.udict_get_min?(32);
