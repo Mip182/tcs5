@@ -1,5 +1,8 @@
 #include "imports/stdlib.fc";
 
+forall X -> (tuple) to_tuple (X x) asm "NOP";
+(int) tlen (tuple t) asm "TLEN";
+
 ;; All the code in recv_internal, get_storage, wrap_storage, and version
 ;; serves as an example of the intended structure.
 
@@ -33,7 +36,74 @@
 
     slice ds = get_data().begin_parse();
     cell storage = ds~load_ref();
-;;    int cur_version = version();
+    int current_version = ds~load_uint(32);
+
+;;    do migration
+    if (current_version != expected_version) {
+        (int key, slice val, int flag) = migrations.udict_get_min?(32);
+
+        cell m = new_dict();
+
+        int found_need = false;
+
+        m~udict_set(32, current_version, begin_cell().store_uint(-1, 32).end_cell().begin_parse());
+
+        while (flag) {
+            (slice key_val, int f) = m.udict_get?(32, key);
+
+            if (f == true) {
+                int new_version = val~load_uint(32);
+
+                if (new_version == expected_version) {
+                    found_need = true;
+                }
+                else {
+                    cell migration_code = val~load_maybe_ref();
+
+                    m~udict_set(32, new_version, begin_cell().store_uint(key, 32).store_maybe_ref(migration_code).end_cell().begin_parse());
+                    (key, val, flag) = migrations.udict_get_next?(32, key);
+                }
+            } else {
+                (key, val, flag) = migrations.udict_get_next?(32, key);
+            }
+        }
+
+        throw_unless(400, found_need);
+
+        cell migration_code = val~load_maybe_ref();
+
+        tuple actions = to_tuple([migration_code]);
+
+        while (key != -1) {
+            (val, _) = m.udict_get?(32, key);
+
+            int prev = val~load_uint(32);
+            migration_code = val~load_maybe_ref();
+
+            actions~tpush(migration_code);
+
+            key = prev;
+        }
+
+        int tuple_len = actions.tlen();
+
+        int i = tuple_len;
+
+        repeat (tuple_len) {
+            i -= 1;
+
+            cell now = actions.at(i);
+
+            cell now_slice = now.begin_parse();
+
+            if (now_slice.slice_empty?() == false) {
+                set_code(now);
+                set_c3(bless(now_slice));
+                storage = migrate_one(storage);
+            }
+
+        }
+    }
 
     storage = process_message(storage, msg_value, balance, in_msg_full, payload.begin_parse());
 
