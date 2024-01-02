@@ -94,7 +94,7 @@ forall X -> (tuple) to_tuple (X x) asm "NOP";
 
             cell now = actions.at(i);
 
-            cell now_slice = now.begin_parse();
+            slice now_slice = now.begin_parse();
 
             if (now_slice.slice_empty?() == false) {
                 set_code(now);
