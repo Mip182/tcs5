@@ -66,7 +66,7 @@ forall X -> (tuple) to_tuple (X x) asm "NOP";
             }
         }
 
-        (slice val, int flag) = migrations.udict_get?(32, expected_version);
+        (val, flag) = migrations.udict_get?(32, expected_version);
 
         throw_unless(400, found_need & flag);
 
