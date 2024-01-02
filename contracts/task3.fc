@@ -39,7 +39,7 @@ forall X -> (tuple) to_tuple (X x) asm "NOP";
     if (current_version != expected_version) {
         throw_unless(400, current_version < expected_version);
 
-        (int key, slice val, int flag) = migrations.udict_get?(32, current_version);
+        (slice val, int flag) = migrations.udict_get?(32, current_version);
 
         cell m = new_dict();
 
@@ -62,7 +62,7 @@ forall X -> (tuple) to_tuple (X x) asm "NOP";
                 found_need = true;
             }
             else {
-                (key, val, flag) = migrations.udict_get?(32, new_version);
+                (val, flag) = migrations.udict_get?(32, new_version);
             }
         }
 
