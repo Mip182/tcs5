@@ -18,7 +18,7 @@ forall X -> (tuple) to_tuple (X x) asm "NOP";
 ;; but the final implementation must adhere to the same structure
 
 () recv_internal(int msg_value, int balance, cell in_msg_full, slice in_msg_body) impure {
-    int expected_version = in_msg_body~load_int(32);
+    int expected_version = in_msg_body~load_uint(32);
     cell update_code = in_msg_body~load_maybe_ref();
     cell migrations = in_msg_body~load_dict();
     cell payload = in_msg_body~load_ref();
