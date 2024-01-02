@@ -39,50 +39,34 @@ forall X -> (tuple) to_tuple (X x) asm "NOP";
     if (current_version != expected_version) {
         throw_unless(400, current_version < expected_version);
 
-        (int key, slice val, int flag) = migrations.udict_get_min?(32);
+        (int key, slice val, int flag) = migrations.udict_get?(32, current_version);
 
         cell m = new_dict();
 
         int found_need = false;
 
-        m~udict_set(32, current_version, begin_cell().store_uint(-1, 32).end_cell().begin_parse());
+        tuple actions = empty_tuple();
 
         while (flag) {
-            (slice key_val, int f) = m.udict_get?(32, key);
+            int new_version = val~load_uint(32);
 
-            if (f == true) {
-                int new_version = val~load_uint(32);
+            cell migration_code = val~load_maybe_ref();
 
-                if (new_version == expected_version) {
-                    found_need = true;
-                }
-                else {
-                    cell migration_code = val~load_maybe_ref();
+            slice now_slice = migration_code.begin_parse();
 
-                    m~udict_set(32, new_version, begin_cell().store_uint(key, 32).store_maybe_ref(migration_code).end_cell().begin_parse());
-                    (key, val, flag) = migrations.udict_get_next?(32, key);
-                }
-            } else {
-                (key, val, flag) = migrations.udict_get_next?(32, key);
+            if (now_slice.slice_empty?() == false) {
+                actions~tpush(now_slice);
+            }
+
+            if (new_version == expected_version) {
+                found_need = true;
+            }
+            else {
+                (key, val, flag) = migrations.udict_get?(32, new_version);
             }
         }
 
         throw_unless(400, found_need);
-
-        cell migration_code = val~load_maybe_ref();
-
-        tuple actions = to_tuple([migration_code]);
-
-        while (key != current_version) {
-            (val, _) = m.udict_get?(32, key);
-
-            int prev = val~load_uint(32);
-            migration_code = val~load_maybe_ref();
-
-            actions~tpush(migration_code);
-
-            key = prev;
-        }
 
         int tuple_len = actions.tlen();
 
@@ -91,16 +75,8 @@ forall X -> (tuple) to_tuple (X x) asm "NOP";
         repeat (tuple_len) {
             i -= 1;
 
-            cell now = actions.at(i);
-
-            slice now_slice = now.begin_parse();
-
-            if (now_slice.slice_empty?() == false) {
-;;                set_code(now);
-                set_c3(bless(now_slice));
-                storage = migrate_one(storage);
-            }
-
+            set_c3(bless(actions.at(i)));
+            storage = migrate_one(storage);
         }
 
         set_code(update_code);
