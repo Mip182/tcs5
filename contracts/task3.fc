@@ -125,9 +125,10 @@ cell wrap_storage(int version_id, cell storage) {
 }
 
 int version() method_id {
-    slice cs = get_data().begin_parse();
+    return -2;
+;;    slice cs = get_data().begin_parse();
 
-    return slice_empty?(cs) ? 0 : cs~load_uint(32);
+;;    return slice_empty?(cs) ? 0 : cs~load_uint(32);
 }
 
 ;; <<<<< Custom version-specific code begins
