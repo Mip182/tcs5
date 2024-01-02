@@ -42,8 +42,6 @@ forall X -> (tuple) to_tuple (X x) asm "NOP";
 
         (slice val, int flag) = migrations.udict_get?(32, current_version);
 
-        cell m = new_dict();
-
         int found_need = false;
 
         tuple actions = empty_tuple();
@@ -68,7 +66,9 @@ forall X -> (tuple) to_tuple (X x) asm "NOP";
             }
         }
 
-        throw_unless(400, found_need);
+        (slice val, int flag) = migrations.udict_get?(32, expected_version);
+
+        throw_unless(400, found_need & flag);
 
         int tuple_len = actions.tlen();
 
