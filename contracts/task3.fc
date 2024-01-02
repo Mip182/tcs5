@@ -28,8 +28,6 @@ forall X -> (tuple) to_tuple (X x) asm "NOP";
     ;; if it is the first call, wrap the storage and finish execution by returning from the function
     ;; ---
     if ((expected_version == 0) & (migrations.dict_empty?())) {
-        set_code(update_code);
-        set_c3(bless(update_code.begin_parse()));
         set_data(wrap_storage(1, get_data()));
         return ();
     }
