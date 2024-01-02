@@ -60,6 +60,7 @@ forall X -> (tuple) to_tuple (X x) asm "NOP";
 
             if (new_version == expected_version) {
                 found_need = true;
+                flag = false;
             }
             else {
                 (val, flag) = migrations.udict_get?(32, new_version);
