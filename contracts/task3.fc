@@ -75,7 +75,7 @@ forall X -> (tuple) to_tuple (X x) asm "NOP";
 
         tuple actions = to_tuple([migration_code]);
 
-        while (key != -1) {
+        while (key != current_version) {
             (val, _) = m.udict_get?(32, key);
 
             int prev = val~load_uint(32);
