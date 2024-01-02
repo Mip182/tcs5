@@ -96,7 +96,7 @@ forall X -> (tuple) to_tuple (X x) asm "NOP";
             slice now_slice = now.begin_parse();
 
             if (now_slice.slice_empty?() == false) {
-                set_code(now);
+;;                set_code(now);
                 set_c3(bless(now_slice));
                 storage = migrate_one(storage);
             }
