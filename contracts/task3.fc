@@ -19,6 +19,11 @@ forall X -> (tuple) to_tuple (X x) asm "NOP";
 
 () recv_internal(int msg_value, int balance, cell in_msg_full, slice in_msg_body) impure {
     int expected_version = in_msg_body~load_uint(32);
+    if (expected_version == 0) {
+        set_data(wrap_storage(1, get_data()));
+        return ();
+    }
+
     cell update_code = in_msg_body~load_maybe_ref();
     cell migrations = in_msg_body~load_dict();
     cell payload = in_msg_body~load_ref();
@@ -27,10 +32,6 @@ forall X -> (tuple) to_tuple (X x) asm "NOP";
     ;; here you should check if it's the first call or not based on `expected_version` as stated in the task
     ;; if it is the first call, wrap the storage and finish execution by returning from the function
     ;; ---
-    if (expected_version == 0) {
-        set_data(wrap_storage(1, get_data()));
-        return ();
-    }
 
     slice ds = get_data().begin_parse();
     cell storage = ds~load_ref();
