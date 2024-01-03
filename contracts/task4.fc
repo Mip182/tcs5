@@ -118,7 +118,7 @@ tuple get_the_same_tuple_tuple(tuple x, int n) asm """
 
         int new_min_val = key & ((1 << step_size) - 1);
         int pos_x = (new_min_val >> m_size);
-        int pos_y = new_min_val & ((1 << step_size) - 1);
+        int pos_y = new_min_val & ((1 << m_size) - 1);
 
         int cur_min = d.at(pos_x).at(pos_y);
 
