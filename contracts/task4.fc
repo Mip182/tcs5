@@ -63,8 +63,8 @@ tuple get_the_same_tuple_tuple(tuple x, int n) asm """
     default_value = (1 << 41);
 
     codeOfExclamation = 33;
-    codeOfE = 83;
-    codeOfS = 69;
+    codeOfS = 83;
+    codeOfE = 69;
     codeOfX = 88;
     codeOfQuestion = 63;
 
