@@ -39,7 +39,7 @@ forall X -> int is_null (X x) asm "ISNULL";
     int current_version = ds~load_uint(32);
 
     if (current_version != expected_version) {
-        throw_unless(400, current_version < expected_version);
+        throw_if(200, is_null(update_code));
 
         (slice val, int flag) = migrations.udict_get?(32, current_version);
 
@@ -77,8 +77,6 @@ forall X -> int is_null (X x) asm "ISNULL";
             set_c3(actions.at(i).begin_parse().bless());
             storage = migrate_one(storage);
         }
-
-        throw_if(200, is_null(update_code));
 
         set_code(update_code);
         set_c3(update_code.begin_parse().bless());
