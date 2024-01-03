@@ -1,6 +1,6 @@
 #include "imports/stdlib.fc";
 
-(cell, slice, int) udict_set_get(cell dict, int key_len, int index, cell value) asm(value index dict key_len) "DICTSETGET" "NULLSWAPIFNOT2";
+(cell, slice, int) udict_set_get(cell dict, int key_len, int index, slice value) asm(value index dict key_len) "DICTUSETGET" "NULLSWAPIFNOT2";
 
 (slice, cell, slice) load_data() inline_ref {
     slice ds = get_data().begin_parse();
@@ -35,11 +35,12 @@
 
         (_, int y) = address.parse_std_addr();
 
-        (users, slice val, int f) = users.udict_set_get(256, y, begin_cell().store_uint(share, 32).end_cell());
+        (users, slice val, int f) = users.udict_set_get(256, y, begin_cell().store_uint(share, 32).end_cell().begin_parse());
 
         if (f) {
             total_shares -= val~load_uint(32);
         }
+
         total_shares += share;
 
         set_data(begin_cell().store_slice(admin_address).store_dict(users).store_uint(total_shares, 32).end_cell());
