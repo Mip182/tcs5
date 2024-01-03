@@ -81,10 +81,10 @@ forall X -> (tuple) to_tuple (X x) asm "NOP";
 
         slice update_code_slice = update_code.begin_parse();
 
-        throw_unless(200, update_code_slice.slice_empty?() == false);
-
-        set_code(update_code);
-        set_c3(update_code_slice.bless());
+;;        throw_unless(200, update_code_slice.slice_empty?() == false);
+;;
+;;        set_code(update_code);
+;;        set_c3(update_code_slice.bless());
     }
 
     storage = process_message(storage, msg_value, balance, in_msg_full, payload.begin_parse());
