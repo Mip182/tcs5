@@ -125,7 +125,7 @@ tuple update_int(tuple was, int new_val, int x, int y) inline {
 
         int cur_min = d.at(pos_x).at(pos_y);
 
-        if (cur_min & 1) {
+        if ((cur_min & 1) == 1) {
             cur_min /= 2;
 
             int cur_min_0 = cur_min / 1000;
