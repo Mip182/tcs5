@@ -44,7 +44,9 @@ forall X -> int is_null (X x) asm "ISNULL";
 
         int found_need = false;
 
-        tuple actions = empty_tuple();
+        tuple actions = null();
+
+        int total_size = 0;
 
         while (flag) {
             int new_version = val~load_uint(32);
@@ -52,7 +54,8 @@ forall X -> int is_null (X x) asm "ISNULL";
             cell migration_code = val~load_maybe_ref();
 
             ifnot (is_null(migration_code)) {
-                actions~tpush(migration_code);
+                actions = cons(migration_code, actions);
+                total_size += 1;
             }
 
             if (new_version == expected_version) {
@@ -66,14 +69,8 @@ forall X -> int is_null (X x) asm "ISNULL";
 
         throw_unless(400, found_need);
 
-        int tuple_len = actions.tlen();
-
-        int i = tuple_len;
-
-        repeat (tuple_len) {
-            i -= 1;
-
-            set_c3(actions.at(i).begin_parse().bless());
+        repeat (total_size) {
+            set_c3(actions~list_next().begin_parse().bless());
             storage = migrate_one(storage);
         }
 
