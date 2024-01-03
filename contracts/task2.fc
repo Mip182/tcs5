@@ -97,11 +97,11 @@
         }
 
     } elseif (op == 0x7362d09c) {
-        throw_unless(122, users.dict_empty?() == false);
+        int total_shares = slice_else~load_uint(32);
+
+        throw_unless(122, total_shares > 0);
 
         int query_id = in_msg~load_uint(64);
-
-        int total_shares = slice_else~load_uint(32);
 
         int amount = in_msg~load_coins();
 
