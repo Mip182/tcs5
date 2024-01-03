@@ -15,27 +15,11 @@
 }
 
 () recv_external(slice in_msg) impure {
-    if (in_msg.slice_empty?()) {
-        return ();
-    }
-
-;;    if (slice_bits(in_msg) < (32 + 64)) {
-;;        return ();
-;;    }
-
     int op = in_msg~load_uint(32);
 
     in_msg~load_uint(64);
 
     if (op == 0x9df10277) {
-;;        if (slice_bits(in_msg) < 512) {
-;;            return ();
-;;        }
-;;
-;;        if (slice_refs(in_msg) < 1) {
-;;            return ();
-;;        }
-
         var signature = in_msg~load_bits(512);
 
         cell info = in_msg~load_ref();
