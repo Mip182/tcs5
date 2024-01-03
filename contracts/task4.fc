@@ -45,7 +45,7 @@ tuple get_the_same_tuple_int(int x, int n) asm """
     REPEAT:<{	//  x
     DUP
   }>
-    n GETGLOB TUPLEVAR
+    N GETGLOB TUPLEVAR
 """;
 
 tuple get_the_same_tuple_tuple(tuple x, int n) asm """
