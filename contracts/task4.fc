@@ -14,8 +14,6 @@ global int start_y;
 global int end_x;
 global int end_y;
 global int set_size;
-global int step_size;
-global int m_size;
 
 () recv_internal(int my_balance, int msg_value, cell in_msg_full, slice in_msg_body) impure {
 
@@ -62,7 +60,7 @@ tuple get_the_same_tuple_tuple(tuple x, int n) asm """
 """;
 
 (int, int, int, tuple) solve(int n, int m, tuple maze) method_id {
-;;    cur_min, par, used
+    ;;    cur_min, par, used
     default_value = (1 << 41);
 
     codeOfExclamation = 33;
@@ -75,9 +73,6 @@ tuple get_the_same_tuple_tuple(tuple x, int n) asm """
     start_y = -1;
     end_x = -1;
     end_y = -1;
-
-    step_size = 10;
-    m_size = 5;
 
     tuple d = get_the_same_tuple_tuple(get_the_same_tuple_int(default_value, m), n);
 
@@ -107,30 +102,30 @@ tuple get_the_same_tuple_tuple(tuple x, int n) asm """
         }
     }
 
-    set_size = 40;
+    set_size = 35;
 
     cell s = new_dict();
 
-    s~udict_set(set_size, (start_x << m_size) + start_y, "");
+    s~udict_set(set_size, (start_x << 5) + start_y, "");
 
     while(true) {
         (s, int key, _, _) = s.udict_delete_get_min(set_size);
 
-        int new_min_val = key & ((1 << step_size) - 1);
-        int pos_x = (new_min_val >> m_size);
-        int pos_y = new_min_val & ((1 << m_size) - 1);
+        int new_min_val = key & ((1 << 10) - 1);
+        int pos_x = (new_min_val >> 5);
+        int pos_y = new_min_val & ((1 << 5) - 1);
 
         int cur_min = d.at(pos_x).at(pos_y);
 
         if ((cur_min & 1) == 0) {
             cur_min >>= 1;
 
-            int cur_min_0 = (cur_min >> step_size);
+            int cur_min_0 = (cur_min >> 10);
 
             if ((pos_x == end_x) & (pos_y == end_y)) {
-                int new_pos_val = cur_min & ((1 << step_size) - 1);
-                int new_pos_x = (new_pos_val >> m_size);
-                int new_pos_y = new_pos_val & ((1 << m_size) - 1);
+                int new_pos_val = cur_min & ((1 << 10) - 1);
+                int new_pos_x = (new_pos_val >> 5);
+                int new_pos_y = new_pos_val & ((1 << 5) - 1);
 
                 pos_x = new_pos_x;
                 pos_y = new_pos_y;
@@ -138,15 +133,15 @@ tuple get_the_same_tuple_tuple(tuple x, int n) asm """
                 while ((pos_x != start_x) | (pos_y != start_y)) {
                     maze = update_int(maze, codeOfExclamation, pos_x, pos_y);
 
-                    int new_pos_val = (d.at(pos_x).at(pos_y) >> 1) & ((1 << step_size) - 1);
-                    int new_pos_x = new_pos_val >> m_size;
-                    int new_pos_y = new_pos_val & ((1 << m_size) - 1);
+                    int new_pos_val = (d.at(pos_x).at(pos_y) >> 1) & ((1 << 10) - 1);
+                    int new_pos_x = new_pos_val >> 5;
+                    int new_pos_y = new_pos_val & ((1 << 5) - 1);
 
                     pos_x = new_pos_x;
                     pos_y = new_pos_y;
                 }
 
-                return (cur_min_0 >> (2 * step_size), (cur_min_0 & ((1 << (2 * step_size)) - 1)) >> step_size, (cur_min_0 & ((1 << step_size) - 1)), maze);
+                return (cur_min_0 >> 20, (cur_min_0 & ((1 << 20) - 1)) >> 10, (cur_min_0 & ((1 << 10) - 1)), maze);
             }
 
             d = update_int(d, (cur_min << 1) | 1, pos_x, pos_y);
@@ -171,15 +166,15 @@ tuple get_the_same_tuple_tuple(tuple x, int n) asm """
                                 int new_val = cur_min_0 + 1;
 
                                 if (char == codeOfX) {
-                                    new_val += (1 << (2 * step_size));
+                                    new_val += (1 << 20);
                                 } elseif (char == codeOfQuestion) {
-                                    new_val += (1 << step_size);
+                                    new_val += (1 << 10);
                                 }
 
                                 if ((val >> 11) > new_val) {
-                                    d = update_int(d, (((new_val << step_size) + (pos_x << m_size) + pos_y) << 1), x, y);
+                                    d = update_int(d, (((new_val << 10) + (pos_x << 5) + pos_y) << 1), x, y);
 
-                                    s~udict_set(set_size, (new_val << step_size) + (x << m_size) + y, "");
+                                    s~udict_set(set_size, (new_val << 10) + (x << 5) + y, "");
                                 }
                             }
                         }
@@ -196,4 +191,3 @@ tuple get_the_same_tuple_tuple(tuple x, int n) asm """
 
     return (-1,0,0,null());
 }
-
