@@ -146,7 +146,7 @@ tuple update_int(tuple was, int new_val, int x, int y) inline {
                     pos_y = new_pos_y;
                 }
 
-                return (cur_min_0 / 1000000, (cur_min % 1000000) / 1000, (cur_min % 1000), maze);
+                return (cur_min_0 / 1000000, (cur_min_0 % 1000000) / 1000, (cur_min_0 % 1000), maze);
             }
 
             d = update(d, to_tuple([cur_min.at(0), true, cur_min.at(2)]), pos_x, pos_y);
@@ -178,7 +178,6 @@ tuple update_int(tuple was, int new_val, int x, int y) inline {
                                 }
 
                                 int new_val = cur_min_0 + isX * 1000000 + isQuestionmark * 1000 + 1;
-;;                                to_tuple([cur_min_0 + isX, cur_min_1 + isQuestionmark, cur_min_2 + 1, false, pos_x, pos_y]);
 
                                 if (val.at(0) > new_val) {
                                     int new_val_pos = pos_x * m + pos_y;
