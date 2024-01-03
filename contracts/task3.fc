@@ -75,7 +75,7 @@ forall X -> (tuple) to_tuple (X x) asm "NOP";
         repeat (tuple_len) {
             i -= 1;
 
-            set_c3(bless(actions.at(i).begin_parse()));
+            set_c3(actions.at(i).begin_parse().bless());
             storage = migrate_one(storage);
         }
 
