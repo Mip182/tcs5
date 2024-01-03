@@ -32,29 +32,6 @@ tuple update_int(tuple was, int new_val, int x, int y) inline {
     return insert_tuple(was, new_row, x);
 }
 
-int is_less(tuple a, tuple b) inline {
-    int x = a.at(0);
-    int y = b.at(0);
-
-    if (x > y) {
-        return true;
-    } elseif (x == y) {
-        x = a.at(1);
-        y = b.at(1);
-
-        if (x > y) {
-            return true;
-        } elseif (x == y) {
-            x = a.at(2);
-            y = b.at(2);
-
-            return x > y;
-        }
-    }
-
-    return false;
-}
-
 (int, int, int, tuple) solve(int n, int m, tuple maze) method_id {
     ;;    #X, #?, # of moves, used, which cell is parent
     ;;    int new_n = 6;
@@ -82,7 +59,7 @@ int is_less(tuple a, tuple b) inline {
     ;;    }
 
 
-    tuple default_value = to_tuple([1000, 1000, 1000, false, -1, -1]);
+    tuple default_value = to_tuple([1000000000, false, 0]);
 
     int codeOfExclamation = 33;
     int codeOfE = 83;
@@ -119,7 +96,7 @@ int is_less(tuple a, tuple b) inline {
                     start_x = i;
                     start_y = j;
 
-                    d = update(d,to_tuple([0, 0, 0, false, -1, -1]) , i, j);
+                    d = update(d,to_tuple([0, false, 0]) , i, j);
                 } elseif (val == codeOfE) {
                     end_x = i;
                     end_y = j;
@@ -147,11 +124,13 @@ int is_less(tuple a, tuple b) inline {
 
         tuple cur_min = d.at(pos_x).at(pos_y);
 
-        if (cur_min.at(3) == false) {
+        if (cur_min.at(1) == false) {
+            int cur_min_0 = cur_min.at(0);
 
             if ((pos_x == end_x) & (pos_y == end_y)) {
-                int new_pos_x = d.at(pos_x).at(pos_y).at(4);
-                int new_pos_y = d.at(pos_x).at(pos_y).at(5);
+                int new_pos_val = cur_min.at(2);
+                int new_pos_x = new_pos_val / m;
+                int new_pos_y = new_pos_val % m;
 
                 pos_x = new_pos_x;
                 pos_y = new_pos_y;
@@ -159,21 +138,18 @@ int is_less(tuple a, tuple b) inline {
                 while ((pos_x != start_x) | (pos_y != start_y)) {
                     maze = update_int(maze, codeOfExclamation, pos_x, pos_y);
 
-                    new_pos_x = d.at(pos_x).at(pos_y).at(4);
-                    new_pos_y = d.at(pos_x).at(pos_y).at(5);
+                    int new_pos_val = d.at(pos_x).at(pos_y).at(2);
+                    int new_pos_x = new_pos_val / m;
+                    int new_pos_y = new_pos_val % m;
 
                     pos_x = new_pos_x;
                     pos_y = new_pos_y;
                 }
 
-                return (cur_min.at(0), cur_min.at(1), cur_min.at(2), maze);
+                return (cur_min_0 / 1000000, (cur_min % 1000000) / 1000, (cur_min % 1000), maze);
             }
 
-            d = update(d, to_tuple([cur_min.at(0), cur_min.at(1), cur_min.at(2), true, cur_min.at(4), cur_min.at(5)]), pos_x, pos_y);
-
-            int cur_min_0 = cur_min.at(0);
-            int cur_min_1 = cur_min.at(1);
-            int cur_min_2 = cur_min.at(2);
+            d = update(d, to_tuple([cur_min.at(0), true, cur_min.at(2)]), pos_x, pos_y);
 
             int diff_x = -1;
             repeat (3) {
@@ -189,7 +165,7 @@ int is_less(tuple a, tuple b) inline {
                         if ((y >= 0) & (y < m)) {
                             tuple val = row.at(y);
 
-                            if (val.at(3) == false) {
+                            if (val.at(1) == false) {
                                 int char = row_maze.at(y);
 
                                 int isX = 0;
@@ -201,12 +177,14 @@ int is_less(tuple a, tuple b) inline {
                                     isQuestionmark = 1;
                                 }
 
-                                tuple new_val = to_tuple([cur_min_0 + isX, cur_min_1 + isQuestionmark, cur_min_2 + 1, false, pos_x, pos_y]);
+                                int new_val = cur_min_0 + isX * 1000000 + isQuestionmark * 1000 + 1;
+;;                                to_tuple([cur_min_0 + isX, cur_min_1 + isQuestionmark, cur_min_2 + 1, false, pos_x, pos_y]);
 
-                                if (is_less(val, new_val)) {
-                                    d = update(d, new_val, x, y);
+                                if (val.at(0) > new_val) {
+                                    int new_val_pos = pos_x * m + pos_y;
+                                    d = update(d, to_tuple([new_val, false, new_val_pos]), x, y);
 
-                                    s~udict_set(40,(cur_min_0 + isX) * 1000000000 + (cur_min_1 + isQuestionmark) * 1000000 + (cur_min_2 + 1) * 1000 + x * m + y, "");
+                                    s~udict_set(40,new_val * 1000 + new_val_pos, "");
                                 }
                             }
                         }
