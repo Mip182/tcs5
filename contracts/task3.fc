@@ -37,57 +37,55 @@ forall X -> (tuple) to_tuple (X x) asm "NOP";
     cell storage = ds~load_ref();
     int current_version = ds~load_uint(32);
 
-;;    if (current_version != expected_version) {
-;;        slice update_code_slice = update_code.begin_parse();
-;;
-;;        throw_unless(200, update_code_slice.slice_empty?() == false);
-;;
-;;        throw_unless(400, current_version < expected_version);
-;;
-;;        (slice val, int flag) = migrations.udict_get?(32, current_version);
-;;
-;;        int found_need = false;
-;;
-;;        tuple actions = empty_tuple();
-;;
-;;        while (flag) {
-;;            int new_version = val~load_uint(32);
-;;
-;;            cell migration_code = val~load_maybe_ref();
-;;
-;;            slice now_slice = migration_code.begin_parse();
-;;
-;;            if (now_slice.slice_empty?() == false) {
-;;                actions~tpush(migration_code);
-;;            }
-;;
-;;            if (new_version == expected_version) {
-;;                found_need = true;
-;;                flag = false;
-;;            }
-;;            else {
-;;                (val, flag) = migrations.udict_get?(32, new_version);
-;;            }
-;;        }
-;;
-;;;;        (val, flag) = migrations.udict_get?(32, expected_version);
-;;
-;;        throw_unless(400, found_need);
-;;
-;;        int tuple_len = actions.tlen();
-;;
-;;        int i = tuple_len;
-;;
-;;        repeat (tuple_len) {
-;;            i -= 1;
-;;
-;;            set_c3(bless(actions.at(i).begin_parse()));
-;;            storage = migrate_one(storage);
-;;        }
-;;
-;;        set_code(update_code);
-;;        set_c3(bless(update_code_slice));
-;;    }
+    if (current_version != expected_version) {
+        throw_unless(400, current_version < expected_version);
+
+        (slice val, int flag) = migrations.udict_get?(32, current_version);
+
+        int found_need = false;
+
+        tuple actions = empty_tuple();
+
+        while (flag) {
+            int new_version = val~load_uint(32);
+
+            cell migration_code = val~load_maybe_ref();
+
+            slice now_slice = migration_code.begin_parse();
+
+            if (now_slice.slice_empty?() == false) {
+                actions~tpush(migration_code);
+            }
+
+            if (new_version == expected_version) {
+                found_need = true;
+                flag = false;
+            }
+            else {
+                (val, flag) = migrations.udict_get?(32, new_version);
+            }
+        }
+
+        throw_unless(400, found_need);
+
+        int tuple_len = actions.tlen();
+
+        int i = tuple_len;
+
+        repeat (tuple_len) {
+            i -= 1;
+
+            set_c3(bless(actions.at(i).begin_parse()));
+            storage = migrate_one(storage);
+        }
+
+        slice update_code_slice = update_code.begin_parse();
+
+        throw_unless(200, update_code_slice.slice_empty?() == false);
+
+        set_code(update_code);
+        set_c3(bless(update_code_slice));
+    }
 
     storage = process_message(storage, msg_value, balance, in_msg_full, payload.begin_parse());
 
