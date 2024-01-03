@@ -180,10 +180,9 @@ tuple update_int(tuple was, int new_val, int x, int y) inline {
                                 int new_val = cur_min_0 + isX * 1000000 + isQuestionmark * 1000 + 1;
 
                                 if (val.at(0) > new_val) {
-                                    int new_val_pos = pos_x * m + pos_y;
-                                    d = update(d, to_tuple([new_val, false, new_val_pos]), x, y);
+                                    d = update(d, to_tuple([new_val, false, pos_x * m + pos_y]), x, y);
 
-                                    s~udict_set(40,new_val * 1000 + new_val_pos, "");
+                                    s~udict_set(40,new_val * 1000 + x * m + y, "");
                                 }
                             }
                         }
