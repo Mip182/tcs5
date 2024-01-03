@@ -1,6 +1,6 @@
 #include "imports/stdlib.fc";
 
-(cell, slice, int) udict_set_get(cell dict, int key_len, int index, cell value) asm(value index dict key_len) "DICTSETGET" "NULLSWAPIFNOT2";
+(cell, slice, int) udict_set_get(cell dict, int key_len, int index, slice value) asm(value index dict key_len) "DICTSETGET" "NULLSWAPIFNOT2";
 
 (slice, cell, slice) load_data() inline_ref {
     slice ds = get_data().begin_parse();
