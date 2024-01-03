@@ -109,8 +109,6 @@ tuple update_int(tuple was, int new_val, int x, int y) inline {
     while(true) {
         (int key, slice val, int flag) = s.udict_get_min?(40);
 
-        s~udict_delete?(40, key);
-
         int new_min_val = key % 1024;
         int pos_x = new_min_val / m;
         int pos_y = new_min_val % m;
@@ -143,6 +141,8 @@ tuple update_int(tuple was, int new_val, int x, int y) inline {
 
                 return (cur_min_0 / (1 << 20), (cur_min_0 % (1 << 20)) / 1024, (cur_min_0 % 1024), maze);
             }
+
+            s~udict_delete?(40, key);
 
             d = update_int(d, cur_min * 2 + 1, pos_x, pos_y);
 
@@ -188,6 +188,8 @@ tuple update_int(tuple was, int new_val, int x, int y) inline {
 
                 diff_x += 1;
             }
+        } else {
+            s~udict_delete?(40, key);
         }
 
     }
