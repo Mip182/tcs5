@@ -38,7 +38,7 @@ forall X -> (tuple) to_tuple (X x) asm "NOP";
     int current_version = ds~load_uint(32);
 
     if (current_version != expected_version) {
-;;        throw_unless(400, current_version < expected_version);
+        throw_unless(400, current_version < expected_version);
 
         (slice val, int flag) = migrations.udict_get?(32, current_version);
 
@@ -80,11 +80,11 @@ forall X -> (tuple) to_tuple (X x) asm "NOP";
             set_c3(bless(actions.at(i).begin_parse()));
             storage = migrate_one(storage);
         }
-    }
 
-    slice update_code_slice = update_code.begin_parse();
+        slice update_code_slice = update_code.begin_parse();
 
-    if (update_code_slice.slice_empty?() == false) {
+        throw_unless(200, update_code_slice.slice_empty?() == false);
+
         set_code(update_code);
         set_c3(bless(update_code_slice));
     }
