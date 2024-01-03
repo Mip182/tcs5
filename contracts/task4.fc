@@ -103,10 +103,10 @@ tuple get_the_same_tuple_tuple(tuple x, int n) asm """
 
     cell s = new_dict();
 
-    s~udict_set(40, (start_x << 5) + start_y, "");
+    s~udict_set(30, (start_x << 5) + start_y, "");
 
     while(true) {
-        (s, int key, _, _) = s.udict_delete_get_min(40);
+        (s, int key, _, _) = s.udict_delete_get_min(30);
 
         int new_min_val = key & ((1 << 10) - 1);
         int pos_x = (new_min_val >> 5);
@@ -152,29 +152,26 @@ tuple get_the_same_tuple_tuple(tuple x, int n) asm """
                     int diff_y = -1;
 
                     repeat (3) {
+                        int y = pos_y + diff_y;
 
-                        ifnot ((diff_x == 0) & (diff_y == 0)) {
-                            int y = pos_y + diff_y;
+                        if ((y >= 0) & (y < m)) {
+                            int val = row.at(y);
 
-                            if ((y >= 0) & (y < m)) {
-                                int val = row.at(y);
+                            if ((val & 1) == 0) {
+                                int char = row_maze.at(y);
 
-                                if ((val & 1) == 0) {
-                                    int char = row_maze.at(y);
+                                int new_val = cur_min_0 + 1;
 
-                                    int new_val = cur_min_0 + 1;
+                                if (char == codeOfX) {
+                                    new_val += (1 << 20);
+                                } elseif (char == codeOfQuestion) {
+                                    new_val += (1 << 10);
+                                }
 
-                                    if (char == codeOfX) {
-                                        new_val += (1 << 20);
-                                    } elseif (char == codeOfQuestion) {
-                                        new_val += (1 << 10);
-                                    }
+                                if ((val >> 11) > new_val) {
+                                    d = update_int(d, (((new_val << 10) + (pos_x << 5) + pos_y) << 1), x, y);
 
-                                    if ((val >> 11) > new_val) {
-                                        d = update_int(d, (((new_val << 10) + (pos_x << 5) + pos_y) << 1), x, y);
-
-                                        s~udict_set(40, (new_val << 10) + (x << 5) + y, "");
-                                    }
+                                    s~udict_set(30, (new_val << 10) + (x << 5) + y, "");
                                 }
                             }
                         }
