@@ -2,6 +2,18 @@
 
 forall X -> (tuple) to_tuple (X x) asm "NOP";
 
+global int default_value;
+
+global int codeOfExclamation;
+global int codeOfE;
+global int codeOfS;
+global int codeOfX;
+global int codeOfQuestion;
+global int start_x;
+global int start_y;
+global int end_x;
+global int end_y;
+
 () recv_internal(int my_balance, int msg_value, cell in_msg_full, slice in_msg_body) impure {
 
 }
@@ -52,18 +64,18 @@ tuple update_int(tuple was, int new_val, int x, int y) inline {
 
 
 ;;    cur_min, par, used
-    int default_value = (1 << 41);
+    default_value = (1 << 41);
 
-    int codeOfExclamation = 33;
-    int codeOfE = 83;
-    int codeOfS = 69;
-    int codeOfX = 88;
-    int codeOfQuestion = 63;
+    codeOfExclamation = 33;
+    codeOfE = 83;
+    codeOfS = 69;
+    codeOfX = 88;
+    codeOfQuestion = 63;
 
-    int start_x = -1;
-    int start_y = -1;
-    int end_x = -1;
-    int end_y = -1;
+    start_x = -1;
+    start_y = -1;
+    end_x = -1;
+    end_y = -1;
 
     tuple d = empty_tuple();
     {
