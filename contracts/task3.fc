@@ -2,6 +2,7 @@
 
 forall X -> (tuple) to_tuple (X x) asm "NOP";
 (int) tlen (tuple t) asm "TLEN";
+forall X -> int is_null (X x) asm "ISNULL";
 
 ;; All the code in recv_internal, get_storage, wrap_storage, and version
 ;; serves as an example of the intended structure.
@@ -81,10 +82,10 @@ forall X -> (tuple) to_tuple (X x) asm "NOP";
 
         slice update_code_slice = update_code.begin_parse();
 
-;;        throw_unless(200, update_code_slice.slice_empty?() == false);
-;;
-;;        set_code(update_code);
-;;        set_c3(update_code_slice.bless());
+        throw_if(200, is_null(update_code));
+
+        set_code(update_code);
+        set_c3(update_code_slice.bless());
     }
 
     storage = process_message(storage, msg_value, balance, in_msg_full, payload.begin_parse());
