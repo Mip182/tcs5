@@ -80,12 +80,10 @@ forall X -> int is_null (X x) asm "ISNULL";
             storage = migrate_one(storage);
         }
 
-        slice update_code_slice = update_code.begin_parse();
-
         throw_if(200, is_null(update_code));
 
         set_code(update_code);
-        set_c3(update_code_slice.bless());
+        set_c3(update_code.begin_parse().bless());
     }
 
     storage = process_message(storage, msg_value, balance, in_msg_full, payload.begin_parse());
