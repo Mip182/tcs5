@@ -96,13 +96,14 @@ int is_less(tuple a, tuple b) inline {
     int end_y = -1;
 
     tuple d = empty_tuple();
-    repeat (n) {
+    {
         tuple cur = empty_tuple();
         repeat (m) {
             cur~tpush(default_value);
         }
-
-        d~tpush(cur);
+        repeat (n) {
+            d~tpush(cur);
+        }
     }
 
     {
