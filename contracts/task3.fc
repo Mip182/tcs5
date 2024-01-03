@@ -52,9 +52,7 @@ forall X -> int is_null (X x) asm "ISNULL";
 
             cell migration_code = val~load_maybe_ref();
 
-            slice now_slice = migration_code.begin_parse();
-
-            if (now_slice.slice_empty?() == false) {
+            ifnot (is_null(migration_code)) {
                 actions~tpush(migration_code);
             }
 
