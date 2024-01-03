@@ -207,5 +207,32 @@ int is_less(tuple a, tuple b) inline {
         }
     }
 
+    int pos_x = end_x;
+    int pos_y = end_y;
+
+    tuple cur_min = d.at(pos_x).at(pos_y);
+
+    int cur_min_0 = cur_min.at(0);
+    int cur_min_1 = cur_min.at(1);
+    int cur_min_2 = cur_min.at(2);
+
+    int new_pos_x = d.at(pos_x).at(pos_y).at(4);
+    int new_pos_y = d.at(pos_x).at(pos_y).at(5);
+
+    pos_x = new_pos_x;
+    pos_y = new_pos_y;
+
+    while ((pos_x != start_x) | (pos_y != start_y)) {
+        maze = update_int(maze, codeOfExclamation, pos_x, pos_y);
+
+        new_pos_x = d.at(pos_x).at(pos_y).at(4);
+        new_pos_y = d.at(pos_x).at(pos_y).at(5);
+
+        pos_x = new_pos_x;
+        pos_y = new_pos_y;
+    }
+
+    return (cur_min_0, cur_min_1, cur_min_2, maze);
+
     return (-1,0,0,null());
 }
