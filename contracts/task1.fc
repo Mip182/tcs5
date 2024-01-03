@@ -45,13 +45,15 @@
         set_data(begin_cell().store_uint(public_key, 256).store_uint(new_execution_time, 32).store_slice(receiver).store_uint(new_seqno, 32).end_cell());
 
     } elseif (op == 0xbb4be234) {
-        in_msg~load_uint(64);
-
-        (int public_key, int execution_time, slice receiver, int seqno) = load_data();
+        slice ds = get_data().begin_parse();
+        ds~load_uint(256);
+        int execution_time = ds~load_uint(32);
 
         throw_unless(124, execution_time <= now());
 
         accept_message();
+
+        slice receiver = ds~load_msg_addr();
 
         cell msg = begin_cell()
         .store_uint(0x18, 6)
