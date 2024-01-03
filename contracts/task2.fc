@@ -35,7 +35,7 @@
 
         (_, int y) = address.parse_std_addr();
 
-        (slice val, int f) = users~udict_set_get(256, y, begin_cell().store_uint(share, 32).end_cell().begin_parse());
+        (users, slice val, int f) = users.udict_set_get(256, y, begin_cell().store_uint(share, 32).end_cell().begin_parse());
 
         if (f) {
             total_shares -= val~load_uint(32);
