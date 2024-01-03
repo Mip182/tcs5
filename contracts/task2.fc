@@ -35,7 +35,6 @@
 
         if (f) {
             total_shares -= val~load_uint(32);
-;;            users~udict_delete?(256, y);
         }
 
         total_shares += share;
@@ -68,7 +67,7 @@
 
         throw_unless(122, users.dict_empty?() == false);
 
-        (int key, slice val, int flag) = users.udict_get_min?(256);
+        (users, int key, slice val, int flag) = users.udict_delete_get_min(256);
         while (flag) {
             int amount = msg_value * val~load_uint(32) / total_shares;
 
@@ -85,7 +84,7 @@
             send_raw_message(msg, 1);
 
 
-            (key, val, flag) = users.udict_get_next?(256, key);
+            (users, key, val, flag) = users.udict_delete_get_min(256);
         }
 
     } elseif (op == 0x7362d09c) {
@@ -99,7 +98,7 @@
         cs~load_uint(4);
         var sender_address = cs~load_msg_addr();
 
-        (int key, slice val, int flag) = users.udict_get_min?(256);
+        (users, int key, slice val, int flag) = users.udict_delete_get_min(256);
         while (flag) {
             int jetton_amount = amount * val.preload_uint(32) / total_shares;
 
@@ -126,7 +125,7 @@
 
             send_raw_message(msg.end_cell(), 1);
 
-            (key, val, flag) = users.udict_get_next?(256, key);
+            (users, key, val, flag) = users.udict_delete_get_min(256);
         }
     }
 }
