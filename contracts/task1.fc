@@ -18,26 +18,26 @@
     int op = in_msg~load_uint(32);
 
     if (op == 0x9df10277) {
-        in_msg~load_uint(64);
-
-        var signature = in_msg~load_bits(512);
-
         cell info = in_msg~load_ref();
-
-        var hash = cell_hash(info);
 
         slice cs = info.begin_parse();
 
         (int locked_for, int new_seqno) = (cs~load_uint(32), cs~load_uint(32));
 
-        int new_execution_time = now() + locked_for;
-
         (int public_key, int execution_time, slice receiver, int seqno) = load_data();
 
         throw_unless(119, new_seqno == (seqno + 1));
-        throw_unless(120, check_signature(hash, signature, public_key));
+
+        in_msg~load_uint(64);
+
+        var signature = in_msg~load_bits(512);
+
+        throw_unless(120, check_signature(cell_hash(info), signature, public_key));
         throw_unless(121, locked_for > 0);
         throw_unless(122, execution_time >= now());
+
+        int new_execution_time = now() + locked_for;
+
         throw_unless(123, new_execution_time >= execution_time);
 
         accept_message();
