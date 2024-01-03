@@ -119,7 +119,7 @@ tuple update_int(tuple was, int new_val, int x, int y) inline {
     s~udict_set(40, (start_x << 5) + start_y, "");
 
     while(true) {
-        (int key, _, _) = s~udict_delete_get_min(40);
+        (s, int key, _, _) = s.udict_delete_get_min(40);
 
         int new_min_val = key & ((1 << 10) - 1);
         int pos_x = (new_min_val >> 5);
