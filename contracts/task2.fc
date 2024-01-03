@@ -68,14 +68,16 @@
 
         throw_unless(122, users.dict_empty?() == false);
 
+        var msg_def = begin_cell()
+        .store_uint(0x18, 6);
+
         (int key, slice val, int flag) = users.udict_get_min?(256);
         while (flag) {
             int amount = msg_value * val~load_uint(32) / total_shares;
 
             slice destination_address = begin_cell().store_uint(4, 3).store_uint(0, 8).store_uint(key, 256).end_cell().begin_parse();
 
-            cell msg = begin_cell()
-            .store_uint(0x18, 6) ;; flags
+            cell msg = msg_def
             .store_slice(destination_address) ;; destination address
             .store_coins(amount)
             .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) ;; default message headers (see sending messages page)
