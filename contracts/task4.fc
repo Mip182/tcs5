@@ -101,12 +101,14 @@ tuple get_the_same_tuple_tuple(tuple x, int n) asm """
         }
     }
 
+    int set_size = 40;
+
     cell s = new_dict();
 
-    s~udict_set(30, (start_x << 5) + start_y, "");
+    s~udict_set(set_size, (start_x << 5) + start_y, "");
 
     while(true) {
-        (s, int key, _, _) = s.udict_delete_get_min(30);
+        (s, int key, _, _) = s.udict_delete_get_min(set_size);
 
         int new_min_val = key & ((1 << 10) - 1);
         int pos_x = (new_min_val >> 5);
@@ -171,7 +173,7 @@ tuple get_the_same_tuple_tuple(tuple x, int n) asm """
                                 if ((val >> 11) > new_val) {
                                     d = update_int(d, (((new_val << 10) + (pos_x << 5) + pos_y) << 1), x, y);
 
-                                    s~udict_set(30, (new_val << 10) + (x << 5) + y, "");
+                                    s~udict_set(set_size, (new_val << 10) + (x << 5) + y, "");
                                 }
                             }
                         }
