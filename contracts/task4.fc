@@ -125,7 +125,7 @@ tuple update_int(tuple was, int new_val, int x, int y) inline {
 
         int cur_min = d.at(pos_x).at(pos_y);
 
-        if ((cur_min & 1) == 1) {
+        if ((cur_min & 1) != 0) {
             cur_min /= 2;
 
             int cur_min_0 = cur_min / 1000;
@@ -182,7 +182,7 @@ tuple update_int(tuple was, int new_val, int x, int y) inline {
 
                                 int new_val = cur_min_0 + isX * 1000000 + isQuestionmark * 1000 + 1;
 
-                                if (val / 2000 > new_val) {
+                                if ((val / 2) / 1000 > new_val) {
                                     d = update_int(d, (new_val * 1000 + pos_x * m + pos_y) * 2, x, y);
 
                                     s~udict_set(40,new_val * 1000 + x * m + y, "");
