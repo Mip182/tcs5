@@ -16,9 +16,9 @@
 
     int op = in_msg~load_uint(32);
 
-    (slice admin_address, cell users, int total_shares) = load_data();
-
     if (op == 0x368ddef3) {
+        (slice admin_address, cell users, int total_shares) = load_data();
+
         in_msg~load_uint(64);
 
         var cs = in_msg_cell.begin_parse();
@@ -35,7 +35,7 @@
 
         if (f) {
             total_shares -= val~load_uint(32);
-            users~udict_delete?(256, y);
+;;            users~udict_delete?(256, y);
         }
 
         total_shares += share;
@@ -43,6 +43,8 @@
 
         set_data(begin_cell().store_slice(admin_address).store_dict(users).store_uint(total_shares, 32).end_cell());
     } elseif (op == 0x278205c8) {
+        (slice admin_address, cell users, int total_shares) = load_data();
+
         in_msg~load_uint(64);
 
         var cs = in_msg_cell.begin_parse();
@@ -64,6 +66,8 @@
 
         set_data(begin_cell().store_slice(admin_address).store_dict(users).store_uint(total_shares, 32).end_cell());
     } elseif (op == 0x068530b3) {
+        (slice admin_address, cell users, int total_shares) = load_data();
+
         in_msg~load_uint(64);
 
         throw_unless(122, users.dict_empty?() == false);
@@ -89,6 +93,8 @@
         }
 
     } elseif (op == 0x7362d09c) {
+        (slice admin_address, cell users, int total_shares) = load_data();
+
         int query_id = in_msg~load_uint(64);
 
         throw_unless(122, users.dict_empty?() == false);
