@@ -85,8 +85,8 @@ int is_less(tuple a, tuple b) inline {
     tuple default_value = to_tuple([1000, 1000, 1000, false, -1, -1]);
 
     int codeOfExclamation = 33;
-    int codeOfE = 83;
-    int codeOfS = 69;
+    int codeOfS = 83;
+    int codeOfE = 69;
     int codeOfX = 88;
     int codeOfQuestion = 63;
 
