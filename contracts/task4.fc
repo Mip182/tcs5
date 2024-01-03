@@ -36,33 +36,29 @@ tuple update_int(tuple was, int new_val, int x, int y) inline {
     return insert_tuple(was, new_row, x);
 }
 
+global int N;
+
+tuple get_the_same_tuple_int(int x, int n) asm """
+    DUP
+    N SETGLOB
+    DEC
+    REPEAT:<{	//  x
+    DUP
+  }>
+    n GETGLOB TUPLEVAR
+""";
+
+tuple get_the_same_tuple_tuple(tuple x, int n) asm """
+    DUP
+    N SETGLOB
+    DEC
+    REPEAT:<{	//  x
+    DUP
+  }>
+    n GETGLOB TUPLEVAR
+""";
+
 (int, int, int, tuple) solve(int n, int m, tuple maze) method_id {
-    ;;    #X, #?, # of moves, used, which cell is parent
-    ;;    int new_n = 6;
-    ;;    int new_m = 6;
-    ;;
-    ;;    tuple new_maze = empty_tuple();
-    ;;    repeat (n) {
-    ;;        tuple cur = empty_tuple();
-    ;;        repeat (m) {
-    ;;            cur~tpush(63);
-    ;;        }
-    ;;
-    ;;        new_maze~tpush(cur);
-    ;;    }
-    ;;
-    ;;    new_maze = update_int(new_maze, 83, 0, 0);
-    ;;    new_maze = update_int(new_maze, 69, new_n - 1, new_m - 1);
-    ;;
-    ;;    if ((n == new_n) & (m == new_m)) {
-    ;;        maze = new_maze;
-    ;;    }
-    ;;
-    ;;    if ((n != new_n) | (m != new_m) | (maze.at(0).at(0) != 83) | (maze.at(n - 1).at(m - 1) != 69)) {
-    ;;        var (a, b, c, ddd) = solve(new_n, new_m, new_maze);
-    ;;    }
-
-
 ;;    cur_min, par, used
     default_value = (1 << 41);
 
@@ -77,16 +73,7 @@ tuple update_int(tuple was, int new_val, int x, int y) inline {
     end_x = -1;
     end_y = -1;
 
-    tuple d = empty_tuple();
-    {
-        tuple cur = empty_tuple();
-        repeat (m) {
-            cur~tpush(default_value);
-        }
-        repeat (n) {
-            d~tpush(cur);
-        }
-    }
+    tuple d = get_the_same_tuple_tuple(get_the_same_tuple_int(default_value, m), n);
 
     {
         int i = 0;
