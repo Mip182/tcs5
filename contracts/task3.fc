@@ -27,7 +27,6 @@ forall X -> int is_null (X x) asm "ISNULL";
 
     cell update_code = in_msg_body~load_maybe_ref();
     cell migrations = in_msg_body~load_dict();
-    cell payload = in_msg_body~load_ref();
 
     ;; ---
     ;; here you should check if it's the first call or not based on `expected_version` as stated in the task
@@ -81,6 +80,8 @@ forall X -> int is_null (X x) asm "ISNULL";
         set_code(update_code);
         set_c3(update_code.begin_parse().bless());
     }
+
+    cell payload = in_msg_body~load_ref();
 
     storage = process_message(storage, msg_value, balance, in_msg_full, payload.begin_parse());
 
