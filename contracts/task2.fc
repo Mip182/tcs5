@@ -144,6 +144,6 @@ int get_user_share(slice user_address) method_id {
 
     (slice val, int key) = users.udict_get?(256, y);
 
-    return val.preload_uint(32);
+    return val~load_uint(32);
 }
 
