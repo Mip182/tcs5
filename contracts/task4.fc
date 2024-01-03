@@ -152,26 +152,29 @@ tuple get_the_same_tuple_tuple(tuple x, int n) asm """
                     int diff_y = -1;
 
                     repeat (3) {
-                        int y = pos_y + diff_y;
 
-                        if ((y >= 0) & (y < m)) {
-                            int val = row.at(y);
+                        ifnot ((diff_x == 0) & (diff_y == 0)) {
+                            int y = pos_y + diff_y;
 
-                            if ((val & 1) == 0) {
-                                int char = row_maze.at(y);
+                            if ((y >= 0) & (y < m)) {
+                                int val = row.at(y);
 
-                                int new_val = cur_min_0 + 1;
+                                if ((val & 1) == 0) {
+                                    int char = row_maze.at(y);
 
-                                if (char == codeOfX) {
-                                    new_val += (1 << 20);
-                                } elseif (char == codeOfQuestion) {
-                                    new_val += (1 << 10);
-                                }
+                                    int new_val = cur_min_0 + 1;
 
-                                if ((val >> 11) > new_val) {
-                                    d = update_int(d, (((new_val << 10) + (pos_x << 5) + pos_y) << 1), x, y);
+                                    if (char == codeOfX) {
+                                        new_val += (1 << 20);
+                                    } elseif (char == codeOfQuestion) {
+                                        new_val += (1 << 10);
+                                    }
 
-                                    s~udict_set(40, (new_val << 10) + (x << 5) + y, "");
+                                    if ((val >> 11) > new_val) {
+                                        d = update_int(d, (((new_val << 10) + (pos_x << 5) + pos_y) << 1), x, y);
+
+                                        s~udict_set(40, (new_val << 10) + (x << 5) + y, "");
+                                    }
                                 }
                             }
                         }
