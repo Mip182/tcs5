@@ -143,7 +143,7 @@ int is_less(tuple a, tuple b) inline {
     }
 
     while (queue.null?() == false) {
-        (int front, int new_queue) = pop_front(queue, queue.tlen());
+        (int front, tuple new_queue) = pop_front(queue, queue.tlen());
 
         queue = new_queue;
 
