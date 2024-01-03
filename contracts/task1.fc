@@ -17,9 +17,9 @@
 () recv_external(slice in_msg) impure {
     int op = in_msg~load_uint(32);
 
-    in_msg~load_uint(64);
-
     if (op == 0x9df10277) {
+        in_msg~load_uint(64);
+
         var signature = in_msg~load_bits(512);
 
         cell info = in_msg~load_ref();
@@ -27,10 +27,6 @@
         var hash = cell_hash(info);
 
         slice cs = info.begin_parse();
-
-;;        if (slice_bits(cs) < (32 + 32)) {
-;;            return ();
-;;        }
 
         (int locked_for, int new_seqno) = (cs~load_uint(32), cs~load_uint(32));
 
@@ -45,11 +41,12 @@
         throw_unless(123, new_execution_time >= execution_time);
 
         accept_message();
-;;        in_msg~touch(); ;; maybe delete, IDK
 
         set_data(begin_cell().store_uint(public_key, 256).store_uint(new_execution_time, 32).store_slice(receiver).store_uint(new_seqno, 32).end_cell());
 
     } elseif (op == 0xbb4be234) {
+        in_msg~load_uint(64);
+
         (int public_key, int execution_time, slice receiver, int seqno) = load_data();
 
         throw_unless(124, execution_time <= now());
