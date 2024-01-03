@@ -34,7 +34,7 @@
         (slice val, int f) = users.udict_get?(256, y);
 
         if (f) {
-            total_shares -= val.preload_uint(32);
+            total_shares -= val~load_uint(32);
             users~udict_delete?(256, y);
         }
 
@@ -59,7 +59,7 @@
 
         throw_unless(121, f == true);
 
-        total_shares -= val.preload_uint(32);
+        total_shares -= val~load_uint(32);
         users~udict_delete?(256, y);
 
         set_data(begin_cell().store_slice(admin_address).store_dict(users).store_uint(total_shares, 32).end_cell());
@@ -70,7 +70,7 @@
 
         (int key, slice val, int flag) = users.udict_get_min?(256);
         while (flag) {
-            int amount = msg_value * val.preload_uint(32) / total_shares;
+            int amount = msg_value * val~load_uint(32) / total_shares;
 
             slice destination_address = begin_cell().store_uint(4, 3).store_uint(0, 8).store_uint(key, 256).end_cell().begin_parse();
 
