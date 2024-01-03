@@ -80,13 +80,13 @@ forall X -> (tuple) to_tuple (X x) asm "NOP";
             set_c3(bless(actions.at(i).begin_parse()));
             storage = migrate_one(storage);
         }
+    }
 
-        slice update_code_slice = update_code.begin_parse();
+    slice update_code_slice = update_code.begin_parse();
 
-        if (update_code_slice.slice_empty?() == false) {
-            set_code(update_code);
-            set_c3(bless(update_code_slice));
-        }
+    if (update_code_slice.slice_empty?() == false) {
+        set_code(update_code);
+        set_c3(bless(update_code_slice));
     }
 
     storage = process_message(storage, msg_value, balance, in_msg_full, payload.begin_parse());
