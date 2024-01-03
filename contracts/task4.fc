@@ -205,4 +205,3 @@ tuple update_int(tuple was, int new_val, int x, int y) inline {
 
     return (-1,0,0,null());
 }
-
