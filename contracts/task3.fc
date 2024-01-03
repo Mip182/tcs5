@@ -25,9 +25,6 @@ forall X -> int is_null (X x) asm "ISNULL";
         return ();
     }
 
-    cell update_code = in_msg_body~load_maybe_ref();
-    cell migrations = in_msg_body~load_dict();
-
     ;; ---
     ;; here you should check if it's the first call or not based on `expected_version` as stated in the task
     ;; if it is the first call, wrap the storage and finish execution by returning from the function
@@ -38,7 +35,11 @@ forall X -> int is_null (X x) asm "ISNULL";
     int current_version = ds~load_uint(32);
 
     if (current_version != expected_version) {
+        cell update_code = in_msg_body~load_maybe_ref();
+
         throw_if(200, is_null(update_code));
+
+        cell migrations = in_msg_body~load_dict();
 
         (slice val, int flag) = migrations.udict_get?(32, current_version);
 
