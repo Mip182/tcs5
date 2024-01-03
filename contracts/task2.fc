@@ -68,9 +68,7 @@
 
         set_data(begin_cell().store_slice(admin_address).store_dict(users).store_uint(total_shares, 32).end_cell());
     } elseif (op == 0x068530b3) {
-        int total_shares = slice_else~load_uint(32);
-
-        throw_unless(122, total_shares > 0);
+        throw_unless(122, users.dict_empty?() == false);
 
         int total_shares = slice_else~load_uint(32);
 
@@ -99,12 +97,11 @@
         }
 
     } elseif (op == 0x7362d09c) {
-        int total_shares = slice_else~load_uint(32);
-
-        throw_unless(122, total_shares > 0);
+        throw_unless(122, users.dict_empty?() == false);
 
         int query_id = in_msg~load_uint(64);
 
+        int total_shares = slice_else~load_uint(32);
 
         int amount = in_msg~load_coins();
 
