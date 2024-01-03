@@ -63,8 +63,8 @@ tuple get_the_same_tuple_tuple(tuple x, int n) asm """
     default_value = (1 << 41);
 
     codeOfExclamation = 33;
-    codeOfS = 83;
-    codeOfE = 69;
+    codeOfE = 83;
+    codeOfS = 69;
     codeOfX = 88;
     codeOfQuestion = 63;
 
@@ -148,39 +148,39 @@ tuple get_the_same_tuple_tuple(tuple x, int n) asm """
             int diff_x = -1;
             repeat (3) {
                 int x = pos_x + diff_x;
-                if ((x >= 0) & (x < n)) {
-                    tuple row = d.at(x);
-                    tuple row_maze = maze.at(x);
-                    int diff_y = -1;
+                tuple row = d.at(x);
+                tuple row_maze = maze.at(x);
+                int diff_y = -1;
 
-                    repeat (3) {
-                        int y = pos_y + diff_y;
+                repeat (3) {
+                    int y = pos_y + diff_y;
 
-                        if ((y >= 0) & (y < m)) {
-                            int val = row.at(y);
+                    try {
+                        int val = row.at(y);
 
-                            if ((val & 1) == 0) {
-                                int char = row_maze.at(y);
+                        if ((val & 1) == 0) {
+                            int char = row_maze.at(y);
 
-                                int new_val = cur_min_0 + 1;
+                            int new_val = cur_min_0 + 1;
 
-                                if (char == codeOfX) {
-                                    new_val += (1 << 20);
-                                } elseif (char == codeOfQuestion) {
-                                    new_val += (1 << 10);
-                                }
+                            if (char == codeOfX) {
+                                new_val += (1 << 20);
+                            } elseif (char == codeOfQuestion) {
+                                new_val += (1 << 10);
+                            }
 
-                                if ((val >> 11) > new_val) {
-                                    d = update_int(d, (((new_val << 10) + (pos_x << 5) + pos_y) << 1), x, y);
+                            if ((val >> 11) > new_val) {
+                                d = update_int(d, (((new_val << 10) + (pos_x << 5) + pos_y) << 1), x, y);
 
-                                    s~udict_set(set_size, (new_val << 10) + (x << 5) + y, "");
-                                }
+                                s~udict_set(set_size, (new_val << 10) + (x << 5) + y, "");
                             }
                         }
-
-                        diff_y += 1;
+                    } catch (_, _) {
                     }
+
+                    diff_y += 1;
                 }
+
 
                 diff_x += 1;
             }

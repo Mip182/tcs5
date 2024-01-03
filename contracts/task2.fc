@@ -6,7 +6,6 @@
         ds~load_msg_addr(),
         ds~load_dict(),
         ds
-;;        slice_empty?(ds) ? 0 : ds~load_uint(32)
     );
 }
 
