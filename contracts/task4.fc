@@ -16,14 +16,6 @@ tuple insert_int(tuple t, int x, int k) asm """
   SETINDEXVAR
 """;
 
-tuple update(tuple was, tuple new_val, int x, int y) inline {
-    tuple row = was.at(x);
-
-    tuple new_row = insert_tuple(row, new_val, y);
-
-    return insert_tuple(was, new_row, x);
-}
-
 tuple update_int(tuple was, int new_val, int x, int y) inline {
     tuple row = was.at(x);
 
@@ -60,7 +52,7 @@ tuple update_int(tuple was, int new_val, int x, int y) inline {
 
 
 ;;    cur_min, par, used
-    int default_value = 2000000000000;
+    int default_value = (1 << 41);
 
     int codeOfExclamation = 33;
     int codeOfE = 83;
@@ -119,7 +111,7 @@ tuple update_int(tuple was, int new_val, int x, int y) inline {
 
         s~udict_delete?(40, key);
 
-        int new_min_val = key % 1000;
+        int new_min_val = key % 1024;
         int pos_x = new_min_val / m;
         int pos_y = new_min_val % m;
 
@@ -128,10 +120,10 @@ tuple update_int(tuple was, int new_val, int x, int y) inline {
         if ((cur_min & 1) == 0) {
             cur_min /= 2;
 
-            int cur_min_0 = cur_min / 1000;
+            int cur_min_0 = cur_min / 1024;
 
             if ((pos_x == end_x) & (pos_y == end_y)) {
-                int new_pos_val = cur_min % 1000;
+                int new_pos_val = cur_min % 1024;
                 int new_pos_x = new_pos_val / m;
                 int new_pos_y = new_pos_val % m;
 
@@ -141,7 +133,7 @@ tuple update_int(tuple was, int new_val, int x, int y) inline {
                 while ((pos_x != start_x) | (pos_y != start_y)) {
                     maze = update_int(maze, codeOfExclamation, pos_x, pos_y);
 
-                    int new_pos_val = (d.at(pos_x).at(pos_y) / 2) % 1000;
+                    int new_pos_val = (d.at(pos_x).at(pos_y) / 2) % 1024;
                     int new_pos_x = new_pos_val / m;
                     int new_pos_y = new_pos_val % m;
 
@@ -149,7 +141,7 @@ tuple update_int(tuple was, int new_val, int x, int y) inline {
                     pos_y = new_pos_y;
                 }
 
-                return (cur_min_0 / 1000000, (cur_min_0 % 1000000) / 1000, (cur_min_0 % 1000), maze);
+                return (cur_min_0 / (1 << 20), (cur_min_0 % (1 << 20)) / 1024, (cur_min_0 % 1024), maze);
             }
 
             d = update_int(d, cur_min * 2 + 1, pos_x, pos_y);
@@ -180,12 +172,12 @@ tuple update_int(tuple was, int new_val, int x, int y) inline {
                                     isQuestionmark = 1;
                                 }
 
-                                int new_val = cur_min_0 + isX * 1000000 + isQuestionmark * 1000 + 1;
+                                int new_val = cur_min_0 + isX * (1 << 20) + isQuestionmark * 1024 + 1;
 
-                                if ((val / 2) / 1000 > new_val) {
-                                    d = update_int(d, (new_val * 1000 + pos_x * m + pos_y) * 2, x, y);
+                                if ((val / 2) / 1024 > new_val) {
+                                    d = update_int(d, (new_val * 1024 + pos_x * m + pos_y) * 2, x, y);
 
-                                    s~udict_set(40,new_val * 1000 + x * m + y, "");
+                                    s~udict_set(40,new_val * 1024 + x * m + y, "");
                                 }
                             }
                         }
