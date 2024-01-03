@@ -64,8 +64,6 @@
 
         set_data(begin_cell().store_slice(admin_address).store_dict(users).store_uint(total_shares, 32).end_cell());
     } elseif (op == 0x068530b3) {
-        in_msg~load_uint(64);
-
         throw_unless(122, users.dict_empty?() == false);
 
         var msg_def = begin_cell()
