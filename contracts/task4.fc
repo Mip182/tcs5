@@ -8,9 +8,9 @@ forall X -> (tuple) to_tuple (X x) asm "NOP";
 }
 
 (int, tuple) pop_front(tuple t, int n) asm """
-    DUP N SETGLOB
+    DUP 1 SETGLOB
     UNTUPLEVAR  // x_1, ..., x_n
-    N GETGLOB DEC
+    1 GETGLOB DEC
     TUPLEVAR
 """;
 
