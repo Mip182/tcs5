@@ -1,22 +1,23 @@
 #include "imports/stdlib.fc";
 
-(slice, cell, int) load_data() inline_ref {
+(slice, cell, slice) load_data() inline_ref {
     slice ds = get_data().begin_parse();
     return (
         ds~load_msg_addr(),
         ds~load_dict(),
-        slice_empty?(ds) ? 0 : ds~load_uint(32)
+        ds
+;;        slice_empty?(ds) ? 0 : ds~load_uint(32)
     );
 }
 
 () recv_internal(int msg_value, cell in_msg_cell, slice in_msg) impure {
-;;    if (in_msg.slice_bits() < 32) {
-;;        return ();
-;;    }
+    if (in_msg.slice_bits() < 32) {
+        return ();
+    }
 
     int op = in_msg~load_uint(32);
 
-    (slice admin_address, cell users, int total_shares) = load_data();
+    (slice admin_address, cell users, slice slice_else) = load_data();
 
     if (op == 0x368ddef3) {
         in_msg~load_uint(64);
@@ -26,6 +27,8 @@
         var sender_address = cs~load_msg_addr();
 
         throw_unless(120, equal_slices(sender_address, admin_address));
+
+        int total_shares = slice_empty?(slice_else) ? 0 : slice_else~load_uint(32);
 
         (slice address, int share) = (in_msg~load_msg_addr(), in_msg~load_uint(32));
 
@@ -59,12 +62,16 @@
 
         throw_unless(121, f == true);
 
+        int total_shares = slice_else~load_uint(32);
+
         total_shares -= val~load_uint(32);
         users~udict_delete?(256, y);
 
         set_data(begin_cell().store_slice(admin_address).store_dict(users).store_uint(total_shares, 32).end_cell());
     } elseif (op == 0x068530b3) {
         throw_unless(122, users.dict_empty?() == false);
+
+        int total_shares = slice_else~load_uint(32);
 
         var msg_def = begin_cell()
         .store_uint(0x18, 6);
@@ -92,6 +99,8 @@
         int query_id = in_msg~load_uint(64);
 
         throw_unless(122, users.dict_empty?() == false);
+
+        int total_shares = slice_else~load_uint(32);
 
         int amount = in_msg~load_coins();
 
