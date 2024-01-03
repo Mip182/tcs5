@@ -97,7 +97,7 @@ tuple update_int(tuple was, int new_val, int x, int y) inline {
                     start_x = i;
                     start_y = j;
 
-                    d = update_int(d,0 , i, j);
+                    d = update_int(d, 0 , i, j);
                 } elseif (val == codeOfE) {
                     end_x = i;
                     end_y = j;
@@ -125,7 +125,7 @@ tuple update_int(tuple was, int new_val, int x, int y) inline {
 
         int cur_min = d.at(pos_x).at(pos_y);
 
-        if ((cur_min & 1) != 0) {
+        if ((cur_min & 1) == 0) {
             cur_min /= 2;
 
             int cur_min_0 = cur_min / 1000;
