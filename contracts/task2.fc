@@ -76,11 +76,13 @@
         var msg_def = begin_cell()
         .store_uint(0x18, 6);
 
+        var dest_addr_beg = begin_cell().store_uint(4, 3).store_uint(0, 8);
+
         (int key, slice val, int flag) = users.udict_get_min?(256);
         while (flag) {
             int amount = msg_value * val~load_uint(32) / total_shares;
 
-            slice destination_address = begin_cell().store_uint(4, 3).store_uint(0, 8).store_uint(key, 256).end_cell().begin_parse();
+            slice destination_address = dest_addr_beg.store_uint(key, 256).end_cell().begin_parse();
 
             cell msg = msg_def
             .store_slice(destination_address) ;; destination address
@@ -114,15 +116,19 @@
         .store_coins(20000000)
         .store_uint(1, 1 + 4 + 4 + 64 + 32 + 1 + 1);
 
+        var dest_addr_beg = begin_cell().store_uint(4, 3).store_uint(0, 8);
+
+        var msg_body_beg = begin_cell()
+        .store_uint(0x0f8a7ea5, 32)
+        .store_uint(query_id, 64);
+
         (int key, slice val, int flag) = users.udict_get_min?(256);
         while (flag) {
             int jetton_amount = amount * val.preload_uint(32) / total_shares;
 
-            slice destination_address = begin_cell().store_uint(4, 3).store_uint(0, 8).store_uint(key, 256).end_cell().begin_parse();
+            slice destination_address = dest_addr_beg.store_uint(key, 256).end_cell().begin_parse();
 
-            var msg_body = begin_cell()
-            .store_uint(0x0f8a7ea5, 32)
-            .store_uint(query_id, 64)
+            var msg_body = msg_body_beg
             .store_coins(jetton_amount)
             .store_slice(destination_address)
             .store_slice(destination_address)
