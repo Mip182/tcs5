@@ -59,7 +59,8 @@ tuple update_int(tuple was, int new_val, int x, int y) inline {
     ;;    }
 
 
-    tuple default_value = to_tuple([1000000000, false, 0]);
+;;    cur_min, par, used
+    int default_value = 1000000000000 * 2;
 
     int codeOfExclamation = 33;
     int codeOfE = 83;
@@ -122,13 +123,15 @@ tuple update_int(tuple was, int new_val, int x, int y) inline {
         int pos_x = new_min_val / m;
         int pos_y = new_min_val % m;
 
-        tuple cur_min = d.at(pos_x).at(pos_y);
+        int cur_min = d.at(pos_x).at(pos_y);
 
-        if (cur_min.at(1) == false) {
-            int cur_min_0 = cur_min.at(0);
+        if (cur_min & 1) {
+            cur_min /= 2;
+
+            int cur_min_0 = cur_min / 1000;
 
             if ((pos_x == end_x) & (pos_y == end_y)) {
-                int new_pos_val = cur_min.at(2);
+                int new_pos_val = cur_min % 1000;
                 int new_pos_x = new_pos_val / m;
                 int new_pos_y = new_pos_val % m;
 
@@ -138,7 +141,7 @@ tuple update_int(tuple was, int new_val, int x, int y) inline {
                 while ((pos_x != start_x) | (pos_y != start_y)) {
                     maze = update_int(maze, codeOfExclamation, pos_x, pos_y);
 
-                    int new_pos_val = d.at(pos_x).at(pos_y).at(2);
+                    int new_pos_val = (d.at(pos_x).at(pos_y) / 2) % 1000;
                     int new_pos_x = new_pos_val / m;
                     int new_pos_y = new_pos_val % m;
 
@@ -149,7 +152,7 @@ tuple update_int(tuple was, int new_val, int x, int y) inline {
                 return (cur_min_0 / 1000000, (cur_min_0 % 1000000) / 1000, (cur_min_0 % 1000), maze);
             }
 
-            d = update(d, to_tuple([cur_min.at(0), true, cur_min.at(2)]), pos_x, pos_y);
+            d = update_int(d, cur_min * 2 + 1, pos_x, pos_y);
 
             int diff_x = -1;
             repeat (3) {
@@ -163,9 +166,9 @@ tuple update_int(tuple was, int new_val, int x, int y) inline {
                         int y = pos_y + diff_y;
 
                         if ((y >= 0) & (y < m)) {
-                            tuple val = row.at(y);
+                            int val = row.at(y);
 
-                            if (val.at(1) == false) {
+                            if ((val & 1) == 0) {
                                 int char = row_maze.at(y);
 
                                 int isX = 0;
@@ -179,8 +182,8 @@ tuple update_int(tuple was, int new_val, int x, int y) inline {
 
                                 int new_val = cur_min_0 + isX * 1000000 + isQuestionmark * 1000 + 1;
 
-                                if (val.at(0) > new_val) {
-                                    d = update(d, to_tuple([new_val, false, pos_x * m + pos_y]), x, y);
+                                if (val / 2000 > new_val) {
+                                    d = update_int(d, (new_val * 1000 + pos_x * m + pos_y) * 2, x, y);
 
                                     s~udict_set(40,new_val * 1000 + x * m + y, "");
                                 }
