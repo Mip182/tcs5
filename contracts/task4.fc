@@ -1,10 +1,18 @@
 #include "imports/stdlib.fc";
 
 forall X -> (tuple) to_tuple (X x) asm "NOP";
+(int) tlen (tuple t) asm "TLEN";
 
 () recv_internal(int my_balance, int msg_value, cell in_msg_full, slice in_msg_body) impure {
 
 }
+
+(int, tuple) pop_front(tuple t, int n) asm """
+    DUP N SETGLOB
+    UNTUPLEVAR  // x_1, ..., x_n
+    N GETGLOB DEC
+    TUPLEVAR
+""";
 
 tuple insert_tuple(tuple t, tuple x, int k) asm """
   // t x k
@@ -121,7 +129,7 @@ int is_less(tuple a, tuple b) inline {
                     start_y = j;
 
                     d = update(d,to_tuple([0, 0, 0, -1, -1]) , i, j);
-                    queue = cons(i * m + j, queue);
+                    queue~tpush(i * m + j);
                 } elseif (val == codeOfE) {
                     end_x = i;
                     end_y = j;
@@ -135,7 +143,9 @@ int is_less(tuple a, tuple b) inline {
     }
 
     while (queue.null?() == false) {
-        int front = queue~list_next();
+        (int front, int new_queue) = pop_front(queue, queue.tlen());
+
+        queue = new_queue;
 
         int pos_x = front / m;
         int pos_y = front % m;
@@ -145,26 +155,6 @@ int is_less(tuple a, tuple b) inline {
         int cur_min_0 = cur_min.at(0);
         int cur_min_1 = cur_min.at(1);
         int cur_min_2 = cur_min.at(2);
-
-        if ((pos_x == end_x) & (pos_y == end_y)) {
-            int new_pos_x = d.at(pos_x).at(pos_y).at(4);
-            int new_pos_y = d.at(pos_x).at(pos_y).at(5);
-
-            pos_x = new_pos_x;
-            pos_y = new_pos_y;
-
-            while ((pos_x != start_x) | (pos_y != start_y)) {
-                maze = update_int(maze, codeOfExclamation, pos_x, pos_y);
-
-                new_pos_x = d.at(pos_x).at(pos_y).at(4);
-                new_pos_y = d.at(pos_x).at(pos_y).at(5);
-
-                pos_x = new_pos_x;
-                pos_y = new_pos_y;
-            }
-
-            return (cur_min_0, cur_min_1, cur_min_2, maze);
-        }
 
         int diff_x = -1;
         repeat(3) {
@@ -195,7 +185,7 @@ int is_less(tuple a, tuple b) inline {
 
                         if (is_less(val, new_val)) {
                             d = update(d, new_val, x, y);
-                            queue = cons(x * m + y, queue);
+                            queue~tpush(x * m + y);
                         }
                     }
 
