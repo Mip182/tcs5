@@ -101,7 +101,7 @@ tuple get_the_same_tuple_tuple(tuple x, int n) asm """
         }
     }
 
-    if (false) {
+    if (n > 8) {
         int set_size = 35;
 
         cell s = new_dict();
@@ -203,7 +203,7 @@ tuple get_the_same_tuple_tuple(tuple x, int n) asm """
                     repeat (m) {
                         int val = row.at(j);
 
-                        if (val < cur_min) {
+                        if (((val & 1) == 0) & (val < cur_min)) {
                             cur_min = val;
                             pos_x = i;
                             pos_y = j;
