@@ -65,11 +65,6 @@ tuple get_the_same_tuple_tuple(tuple x, int n) asm """
     codeOfX = 88;
     codeOfQuestion = 63;
 
-    if (n > 8) {
-        codeOfE = 69;
-        codeOfS = 83;
-    }
-
     start_x = -1;
     start_y = -1;
     end_x = -1;
@@ -110,7 +105,7 @@ tuple get_the_same_tuple_tuple(tuple x, int n) asm """
 
     cell s = new_dict();
 
-    slice empty_slice = "";
+    var empty_slice = "";
 
     s~udict_set(set_size, (start_x << 5) | start_y, empty_slice);
     while (true) {
