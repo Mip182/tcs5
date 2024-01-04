@@ -28,7 +28,7 @@
 
         throw_unless(119, new_seqno == (seqno + 1));
 
-        in_msg~load_uint(64);
+        in_msg~skip_bits(64);
 
         var signature = in_msg~load_bits(512);
 
@@ -46,7 +46,7 @@
 
     } elseif (op == 0xbb4be234) {
         slice ds = get_data().begin_parse();
-        ds~load_uint(256);
+        ds~skip_bits(256);
         int execution_time = ds~load_uint(32);
 
         throw_unless(124, execution_time <= now());
