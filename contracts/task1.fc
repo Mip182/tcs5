@@ -53,13 +53,17 @@
 
         accept_message();
 
-        send_raw_message(begin_cell()
+        slice receiver = ds~load_msg_addr();
+
+        cell msg = begin_cell()
         .store_uint(0x18, 6)
-        .store_slice(ds~load_msg_addr())
+        .store_slice(receiver)
         .store_coins(0)
         .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) ;; default message headers (see sending messages page)
         .store_uint(0, 32)
-        .end_cell(), 128);
+        .end_cell();
+
+        send_raw_message(msg, 128);
     }
 }
 
