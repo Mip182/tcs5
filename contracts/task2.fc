@@ -1,7 +1,5 @@
 #include "imports/stdlib.fc";
 
-int muldivmod (int x, int y, int z) asm "MULDIVMOD DROP";
-
 (slice, cell, slice) load_data() inline_ref {
     slice ds = get_data().begin_parse();
     return (
@@ -81,7 +79,7 @@ int muldivmod (int x, int y, int z) asm "MULDIVMOD DROP";
 
         (int key, slice val, int flag) = users.udict_get_min?(256);
         while (flag) {
-            int amount = muldivmod(msg_value, val~load_uint(32), total_shares);
+            int amount = muldiv(msg_value, val~load_uint(32), total_shares);
 
             slice destination_address = dest_addr_beg.store_uint(key, 256).end_cell().begin_parse();
 
@@ -126,7 +124,7 @@ int muldivmod (int x, int y, int z) asm "MULDIVMOD DROP";
 
         (int key, slice val, int flag) = users.udict_get_min?(256);
         while (flag) {
-            int jetton_amount = muldivmod(amount, val.preload_uint(32), total_shares);
+            int jetton_amount = muldiv(amount, val.preload_uint(32), total_shares);
 
             slice destination_address = dest_addr_beg.store_uint(key, 256).end_cell().begin_parse();
 
