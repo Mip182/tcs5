@@ -59,8 +59,8 @@ forall X -> int is_null (X x) asm "ISNULL";
                 total_size += 1;
             }
 
-            if (new_version == expected_version) {
-                found_need = true;
+            if (new_version >= expected_version) {
+                found_need = new_version == expected_version;
                 flag = false;
             }
             else {
