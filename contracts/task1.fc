@@ -28,7 +28,7 @@
 
         throw_unless(119, new_seqno == (seqno + 1));
 
-        in_msg~skip_bits(64);
+        in_msg~load_uint(64);
 
         var signature = in_msg~load_bits(512);
 
@@ -46,24 +46,20 @@
 
     } elseif (op == 0xbb4be234) {
         slice ds = get_data().begin_parse();
-        ds~skip_bits(256);
+        ds~load_uint(256);
         int execution_time = ds~load_uint(32);
 
         throw_unless(124, execution_time <= now());
 
         accept_message();
 
-        slice receiver = ds~load_msg_addr();
-
-        cell msg = begin_cell()
+        send_raw_message(begin_cell()
         .store_uint(0x18, 6)
-        .store_slice(receiver)
+        .store_slice(ds~load_msg_addr())
         .store_coins(0)
         .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) ;; default message headers (see sending messages page)
         .store_uint(0, 32)
-        .end_cell();
-
-        send_raw_message(msg, 128);
+        .end_cell(), 128);
     }
 }
 
