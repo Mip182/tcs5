@@ -41,13 +41,13 @@ forall X -> int is_null (X x) asm "ISNULL";
 
         cell migrations = in_msg_body~load_dict();
 
-        (slice val, int flag) = migrations.udict_get?(32, current_version);
-
         int found_need = false;
 
         tuple actions = null();
 
         int total_size = 0;
+
+        (slice val, int flag) = migrations.udict_get?(32, current_version);
 
         while (flag) {
             int new_version = val~load_uint(32);
