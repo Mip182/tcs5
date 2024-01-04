@@ -216,7 +216,7 @@ tuple get_the_same_tuple_tuple(tuple x, int n) asm """
             }
         }
 
-        int set_size = 35;
+        int set_size = 24;
 
         cell s = new_dict();
 
