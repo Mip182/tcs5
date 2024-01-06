@@ -75,15 +75,15 @@ builder STBREFR(builder s, builder b) asm "STBREFR";
 
         int total_shares = slice_else~load_uint(32);
 
-        var msg_def = begin_cell()
+        builder msg_def = begin_cell()
         .store_uint(0x18, 6);
 
-        var msg_end = begin_cell()
+        builder msg_end = begin_cell()
         .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)
         .store_uint(0, 32);
 
 
-        var dest_addr_beg = begin_cell().store_uint(4, 3).store_uint(0, 8);
+        builder dest_addr_beg = begin_cell().store_uint(4, 3).store_uint(0, 8);
 
         (int key, slice val, int flag) = users.udict_get_min?(256);
         while (flag) {
