@@ -64,12 +64,11 @@ builder STBREFR(builder s, builder b) asm "STBREFR";
 
         throw_unless(121, f);
 
-        int total_shares = slice_else~load_uint(32);
-
-        total_shares -= val~load_uint(32);
         users~udict_delete?(256, y);
 
-        set_data(begin_cell().store_slice(admin_address).store_dict(users).store_uint(total_shares, 32).end_cell());
+        int total_shares = slice_else~load_uint(32);
+
+        set_data(begin_cell().store_slice(admin_address).store_dict(users).store_uint(slice_else~load_uint(32) - val~load_uint(32), 32).end_cell());
     } elseif (op == 0x068530b3) {
         throw_unless(122, users.dict_empty?() == false);
 
