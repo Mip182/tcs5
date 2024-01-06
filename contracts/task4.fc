@@ -294,8 +294,11 @@ tuple get_the_same_tuple_tuple(tuple x, int n) asm """
                                 d = update_int(d, new_val, x, y);
 
 ;;                                update par of x, y - it is (pos_x, pos_y)
-                                par_x = (par_x & (((1 << 250) - 1) ^ (7 << (3 * new_pos)))) | (pos_x << (3 * new_pos));
-                                par_y = (par_y & (((1 << 250) - 1) ^ (7 << (3 * new_pos)))) | (pos_y << (3 * new_pos));
+                                int need_x = pos_x ^ (par_x >> (3 * new_pos)) & ((1 << 3) - 1);
+                                par_x ^= (need_x << (3 * new_pos));
+
+                                int need_y = pos_y ^ (par_y >> (3 * new_pos)) & ((1 << 3) - 1);
+                                par_y ^= (need_y << (3 * new_pos));
 
                                 s~udict_set(set_size, (new_val << 6) | new_pos, empty_slice);
                             }
