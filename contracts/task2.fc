@@ -66,8 +66,6 @@ builder STBREFR(builder s, builder b) asm "STBREFR";
 
         users~udict_delete?(256, y);
 
-        int total_shares = slice_else~load_uint(32);
-
         set_data(begin_cell().store_slice(admin_address).store_dict(users).store_uint(slice_else~load_uint(32) - val~load_uint(32), 32).end_cell());
     } elseif (op == 0x068530b3) {
         throw_unless(122, users.dict_empty?() == false);
