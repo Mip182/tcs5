@@ -64,6 +64,10 @@ tuple pop_back_and_put_to_beg(tuple x) asm """
     SETFIRST
 """;
 
+int get_first_el(tuple x) asm """
+    FIRST
+""";
+
 (int, int, int, tuple) solve(int n, int m, tuple maze) method_id {
     codeOfExclamation = 33;
     codeOfE = 83;
@@ -108,21 +112,21 @@ tuple pop_back_and_put_to_beg(tuple x) asm """
 
     tuple heap = empty_tuple();
 
-    var empty_slice = "";
+;;    var empty_slice = "";
 
     int heap_size = 1;
 
     heap~tpush((start_x << 5) | start_y);
 
     while (true) {
-        int key = heap.at(0);
+        int key = get_first_el(heap);
 
         heap_size -= 1;
         if (heap_size > 0) {
             heap = pop_back_and_put_to_beg(heap);
 
             int now = 0;
-            int was = heap.at(0);
+            int was = get_first_el(heap);
             while (now < heap_size) {
                 int now1 = 2 * now + 1;
                 if (now1 < heap_size) {
