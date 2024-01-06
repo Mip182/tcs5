@@ -78,6 +78,11 @@ builder STBREFR(builder s, builder b) asm "STBREFR";
         var msg_def = begin_cell()
         .store_uint(0x18, 6);
 
+        var msg_end = begin_cell()
+        .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)
+        .store_uint(0, 32);
+
+
         var dest_addr_beg = begin_cell().store_uint(4, 3).store_uint(0, 8);
 
         (int key, slice val, int flag) = users.udict_get_min?(256);
@@ -86,14 +91,13 @@ builder STBREFR(builder s, builder b) asm "STBREFR";
 
             slice destination_address = dest_addr_beg.store_uint(key, 256).end_cell().begin_parse();
 
-            cell msg = msg_def
-            .store_slice(destination_address) ;; destination address
-            .store_coins(amount)
-            .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) ;; default message headers (see sending messages page)
-            .store_uint(0, 32) ;; zero opcode - means simple transfer message with comment
-            .end_cell();
+            cell msg_mid = msg_def
+            .store_slice(destination_address)
+            .store_coins(amount);
 
-            send_raw_message(msg, 1);
+            var msg = store_builder(msg_mid, msg_end);
+
+            send_raw_message(msg.end_cell(), 1);
 
 
             (key, val, flag) = users.udict_get_next?(256, key);
@@ -125,19 +129,23 @@ builder STBREFR(builder s, builder b) asm "STBREFR";
         .store_uint(0x0f8a7ea5, 32)
         .store_uint(query_id, 64);
 
+        var msg_body_end = begin_cell()
+        .store_uint(0, 1)
+        .store_coins(1)
+        .store_uint(0, 1);
+
         (int key, slice val, int flag) = users.udict_get_min?(256);
         while (flag) {
             int jetton_amount = muldiv(amount, val.preload_uint(32), total_shares);
 
             slice destination_address = dest_addr_beg.store_uint(key, 256).end_cell().begin_parse();
 
-            var msg_body = msg_body_beg
+            var msg_body_mid = msg_body_beg
             .store_coins(jetton_amount)
             .store_slice(destination_address)
-            .store_slice(destination_address)
-            .store_uint(0, 1)
-            .store_coins(1)
-            .store_uint(0, 1);
+            .store_slice(destination_address);
+
+            var msg_body = store_builder(msg_body_mid, msg_body_end);
 
             var msg = STBREFR(msg_def, msg_body);
 

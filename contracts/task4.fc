@@ -4,11 +4,6 @@ forall X -> (tuple) to_tuple (X x) asm "NOP";
 
 global int default_value;
 
-global int codeOfExclamation;
-global int codeOfE;
-global int codeOfS;
-global int codeOfX;
-global int codeOfQuestion;
 global int start_x;
 global int start_y;
 global int end_x;
@@ -69,12 +64,6 @@ int get_first_el(tuple x) asm """
 
 
 (int, int, int, tuple) solve(int n, int m, tuple maze) method_id {
-    codeOfExclamation = 33;
-    codeOfE = 83;
-    codeOfS = 69;
-    codeOfX = 88;
-    codeOfQuestion = 63;
-
     start_x = -1;
     start_y = -1;
     end_x = -1;
@@ -93,12 +82,12 @@ int get_first_el(tuple x) asm """
             repeat (m) {
                 int val = row.at(j);
 
-                if (val == codeOfS) {
+                if (val == 69) {
                     start_x = i;
                     start_y = j;
 
                     d = update_int(d, 0, i, j);
-                } elseif (val == codeOfE) {
+                } elseif (val == 83) {
                     end_x = i;
                     end_y = j;
                 }
@@ -138,7 +127,7 @@ int get_first_el(tuple x) asm """
                 pos_y = new_pos_y;
 
                 while ((pos_x != start_x) | (pos_y != start_y)) {
-                    maze = update_int(maze, codeOfExclamation, pos_x, pos_y);
+                    maze = update_int(maze, 33, pos_x, pos_y);
 
                     int new_pos_val = d.at(pos_x).at(pos_y) & ((1 << 10) - 1);
                     int new_pos_x = new_pos_val >> 5;
@@ -168,9 +157,9 @@ int get_first_el(tuple x) asm """
 
                     int new_val = cur_min_0 + 1;
 
-                    if (char == codeOfX) {
+                    if (char == 88) {
                         new_val += (1 << 20);
-                    } elseif (char == codeOfQuestion) {
+                    } elseif (char == 63) {
                         new_val += (1 << 10);
                     }
 
@@ -261,7 +250,7 @@ int get_first_el(tuple x) asm """
                 pos_y = new_pos_y;
 
                 while ((pos_x != start_x) | (pos_y != start_y)) {
-                    maze = update_int(maze, codeOfExclamation, pos_x, pos_y);
+                    maze = update_int(maze, 33, pos_x, pos_y);
 
                     int new_pos_val = d.at(pos_x).at(pos_y) & ((1 << 10) - 1);
                     int new_pos_x = new_pos_val >> 5;
@@ -291,9 +280,9 @@ int get_first_el(tuple x) asm """
 
                     int new_val = cur_min_0 + 1;
 
-                    if (char == codeOfX) {
+                    if (char == 88) {
                         new_val += (1 << 20);
-                    } elseif (char == codeOfQuestion) {
+                    } elseif (char == 63) {
                         new_val += (1 << 10);
                     }
 
