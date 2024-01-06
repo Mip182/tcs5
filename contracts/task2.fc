@@ -84,7 +84,7 @@ builder store_slice_r(slice s, builder b) asm "STSLICE";
 
             slice destination_address = dest_addr_beg.store_uint(key, 256).end_cell().begin_parse();
 
-            builder whatever = store_slice_r(msg_def, destination_address);
+            builder whatever = store_slice_r( destination_address, msg_def);
 
             cell msg = whatever
             .store_coins(amount)
