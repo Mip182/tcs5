@@ -91,7 +91,7 @@ builder STBREFR(builder s, builder b) asm "STBREFR";
 
             slice destination_address = dest_addr_beg.store_uint(key, 256).end_cell().begin_parse();
 
-            cell msg_mid = msg_def
+            builder msg_mid = msg_def
             .store_slice(destination_address)
             .store_coins(amount);
 
