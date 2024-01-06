@@ -45,6 +45,8 @@ forall X -> int is_null (X x) asm "ISNULL";
 
         tuple actions = null();
 
+        int total_size = 0;
+
         (slice val, int flag) = migrations.udict_get?(32, current_version);
 
         while (flag) {
@@ -52,9 +54,10 @@ forall X -> int is_null (X x) asm "ISNULL";
 
             cell migration_code = val~load_maybe_ref();
 
-;;            ifnot (is_null(migration_code)) {
+            ifnot (is_null(migration_code)) {
                 actions = cons(migration_code, actions);
-;;            }
+                total_size += 1;
+            }
 
             if (new_version >= expected_version) {
                 found_need = new_version == expected_version;
@@ -67,12 +70,9 @@ forall X -> int is_null (X x) asm "ISNULL";
 
         throw_unless(400, found_need);
 
-        while (~ actions.is_null()) {
-            cell migration_code = actions~list_next();
-            ifnot (is_null(migration_code)) {
-                set_c3(migration_code.begin_parse().bless());
-                storage = migrate_one(storage);
-            }
+        repeat (total_size) {
+            set_c3(actions~list_next().begin_parse().bless());
+            storage = migrate_one(storage);
         }
 
         set_code(update_code);
@@ -125,5 +125,4 @@ cell migrate_one(cell old_storage) { ;; it's just a placeholder that is required
 }
 
 ;; Custom version-specific code ends >>>>>
-
 
