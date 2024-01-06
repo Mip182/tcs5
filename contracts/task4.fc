@@ -37,7 +37,6 @@ tuple update_int(tuple was, int new_val, int x, int y) inline {
 }
 
 global int N;
-global int M;
 
 tuple get_the_same_tuple_int(int x, int n) asm """
     DUP
@@ -57,15 +56,6 @@ tuple get_the_same_tuple_tuple(tuple x, int n) asm """
     DUP
   }>
     N GETGLOB TUPLEVAR
-""";
-
-tuple pop_back_and_put_to_beg(tuple x) asm """
-    TPOP
-    SETFIRST
-""";
-
-int get_first_el(tuple x) asm """
-    FIRST
 """;
 
 (int, int, int, tuple) solve(int n, int m, tuple maze) method_id {
@@ -110,63 +100,15 @@ int get_first_el(tuple x) asm """
         }
     }
 
-    tuple heap = empty_tuple();
+    int set_size = 35;
 
-;;    var empty_slice = "";
+    cell s = new_dict();
 
-    int heap_size = 1;
+    var empty_slice = "";
 
-    heap~tpush((start_x << 5) | start_y);
-
+    s~udict_set(set_size, (start_x << 5) | start_y, empty_slice);
     while (true) {
-        int key = get_first_el(heap);
-
-        heap_size -= 1;
-        if (heap_size > 0) {
-            heap = pop_back_and_put_to_beg(heap);
-
-            int now = 0;
-            int was = get_first_el(heap);
-            while (now < heap_size) {
-                int now1 = 2 * now + 1;
-                if (now1 < heap_size) {
-                    int now2 = now1 + 1;
-                    int val1 = heap.at(now1);
-                    if (now2 == heap_size) {
-                        if (val1 < was) {
-                            heap = insert_int(heap, was, now1);
-                            heap = insert_int(heap, val1, now);
-                        }
-                        now = heap_size;
-                    } else {
-                        int val2 = heap.at(now2);
-                        if (val1 < val2) {
-                            if (was < val1) {
-                                now = heap_size;
-                            } else {
-                                heap = insert_int(heap, was, now1);
-                                heap = insert_int(heap, val1, now);
-
-                                now = now1;
-                            }
-                        } else {
-                            if (was < val2) {
-                                now = heap_size;
-                            } else {
-                                heap = insert_int(heap, was, now2);
-                                heap = insert_int(heap, val2, now);
-
-                                now = now2;
-                            }
-                        }
-                    }
-                } else {
-                    now = heap_size;
-                }
-            }
-        } else {
-            heap = empty_tuple();
-        }
+        (s, int key, _, _) = s.udict_delete_get_min(set_size);
 
         int new_min_val = key & ((1 << 10) - 1);
         int pos_x = (new_min_val >> 5);
@@ -224,22 +166,7 @@ int get_first_el(tuple x) asm """
                 if ((val >> 11) > new_val) {
                     d = update_int(d, ((new_val << 10) | (pos_x << 5) | pos_y), x, y);
 
-                    int was = (new_val << 10) | (x << 5) | y;
-                    heap~tpush(was);
-                    int now = heap_size;
-                    heap_size += 1;
-                    while (now != 0) {
-                        int prev = (now - 1) / 2;
-                        int val1 = heap.at(prev);
-                        if (val1 > was) {
-                            heap = insert_int(heap, was, prev);
-                            heap = insert_int(heap, val1, now);
-
-                            now = prev;
-                        } else {
-                            now = 0;
-                        }
-                    }
+                    s~udict_set(set_size, (new_val << 10) | (x << 5) | y, empty_slice);
                 }
 
                 y += 1;
