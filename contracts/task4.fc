@@ -146,14 +146,14 @@ tuple get_the_same_tuple_tuple(tuple x, int n) asm """
         int count_rep_x = 1 - diff_x + ((pos_x + 1 == n) ? 0 : 1);
         int x = pos_x + diff_x;
         repeat (count_rep_x) {
-            tuple row = d.at(x);
-            tuple row_maze = maze.at(x);
+;;            tuple row = d.at(x);
+;;            tuple row_maze = maze.at(x);
 
             int y = pos_y + diff_y_beg;
             repeat (count_rep_y) {
-                int val = row.at(y);
+                int val = d.at(x).at(y);
 
-                int char = row_maze.at(y);
+                int char = maze.at(x).at(y);
 
                 int new_val = cur_min_0 + 1;
 
