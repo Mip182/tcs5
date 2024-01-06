@@ -147,7 +147,6 @@ int get_first_el(tuple x) asm """
                                 heap = insert_int(heap, was, now1);
                                 heap = insert_int(heap, val1, now);
 
-                                was = val1;
                                 now = now1;
                             }
                         } else {
@@ -157,7 +156,6 @@ int get_first_el(tuple x) asm """
                                 heap = insert_int(heap, was, now2);
                                 heap = insert_int(heap, val2, now);
 
-                                was = val2;
                                 now = now2;
                             }
                         }
