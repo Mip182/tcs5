@@ -9,6 +9,8 @@
     );
 }
 
+builder store_slice_r(slice s, builder b) asm "STSLICE";
+
 () recv_internal(int msg_value, cell in_msg_cell, slice in_msg) impure {
     if (in_msg.slice_bits() < 32) {
         return ();
@@ -82,8 +84,9 @@
 
             slice destination_address = dest_addr_beg.store_uint(key, 256).end_cell().begin_parse();
 
-            cell msg = msg_def
-            .store_slice(destination_address) ;; destination address
+            builder whatever = store_slice_r(msg_def, destination_address);
+
+            cell msg = whatever
             .store_coins(amount)
             .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) ;; default message headers (see sending messages page)
             .store_uint(0, 32) ;; zero opcode - means simple transfer message with comment
