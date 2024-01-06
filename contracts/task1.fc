@@ -18,8 +18,6 @@
     int op = in_msg~load_uint(32);
 
     if (op == 0x9df10277) {
-        cell info = in_msg~load_ref();
-
         slice cs = info.begin_parse();
 
         (int locked_for, int new_seqno) = (cs~load_uint(32), cs~load_uint(32));
@@ -27,6 +25,8 @@
         (int public_key, int execution_time, slice receiver, int seqno) = load_data();
 
         throw_unless(119, new_seqno == (seqno + 1));
+
+        cell info = in_msg~load_ref();
 
         in_msg~load_uint(64);
 
