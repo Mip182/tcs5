@@ -62,7 +62,7 @@ builder STBREFR(builder s, builder b) asm "STBREFR";
 
         (slice val, int f) = users.udict_get?(256, y);
 
-        throw_unless(121, f == true);
+        throw_unless(121, f);
 
         int total_shares = slice_else~load_uint(32);
 
