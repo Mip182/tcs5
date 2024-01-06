@@ -160,24 +160,20 @@ tuple get_the_same_tuple_tuple(tuple x, int n) asm """
 
                     int val = row.at(y);
 
-                    if ((val & 1) == 0) {
-                        int new_val = cur_min_0 + 1;
+                    int char = row_maze.at(y);
 
-                        if ((val >> 11) > new_val) {
-                            int char = row_maze.at(y);
+                    int new_val = cur_min_0 + 1;
 
-                            if (char == codeOfX) {
-                                new_val += (1 << 20);
-                            } elseif (char == codeOfQuestion) {
-                                new_val += (1 << 10);
-                            }
+                    if (char == codeOfX) {
+                        new_val += (1 << 20);
+                    } elseif (char == codeOfQuestion) {
+                        new_val += (1 << 10);
+                    }
 
-                            if ((val >> 11) > new_val) {
-                                d = update_int(d, (((new_val << 10) | (pos_x << 5) | pos_y) << 1), x, y);
+                    if ((val >> 11) > new_val) {
+                        d = update_int(d, (((new_val << 10) | (pos_x << 5) | pos_y) << 1), x, y);
 
-                                s~udict_set(set_size, (new_val << 10) | (x << 5) | y, empty_slice);
-                            }
-                        }
+                        s~udict_set(set_size, (new_val << 10) | (x << 5) | y, empty_slice);
                     }
 
                     diff_y += 1;
