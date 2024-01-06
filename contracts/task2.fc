@@ -37,7 +37,6 @@
 
         if (f) {
             total_shares -= val~load_uint(32);
-;;            users~udict_delete?(256, y);
         }
 
         total_shares += share;
